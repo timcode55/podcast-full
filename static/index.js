@@ -4,7 +4,7 @@ const request = require('request-promise');
 let express = require('express');
 const path = require('path');
 let mongodb = require('mongodb');
-const Rating = require('../Rating');
+const Rating = require('./Rating');
 
 let app = express();
 let db;
@@ -166,4 +166,9 @@ app.post('/create-item', (req, res) => {
 	db.collection('items').insertOne({ object }, () => {
 		res.send('Thanks for submitting the form.');
 	});
+});
+
+app.get('/podcast', (req, res) => {
+	// res.sendFile(path.join(__dirname + '/index.html'));
+	res.sendFile(path.join(__dirname + '/static/index.html'));
 });
