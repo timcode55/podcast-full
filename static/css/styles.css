@@ -1,0 +1,301 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	background-color: rgb(196, 194, 194);
+}
+
+.container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-top: 40px;
+	/* font-size: 3em; */
+	width: 75%;
+	text-align: center;
+	margin: 100px auto;
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+}
+
+.listen {
+	font-size: 3em;
+	font-family: Arial, Helvetica, sans-serif;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	display: flex;
+
+	/* flex-direction: column; */
+	/* flex-wrap: wrap; */
+}
+
+.button::-moz-focus-inner {
+	border: 0;
+	padding: 0;
+}
+
+.button {
+	display: flex;
+	text-align: center;
+	justify-content: center;
+	*display: inline;
+	zoom: 1;
+	padding: 6px 20px;
+	margin: 5px;
+	cursor: pointer;
+	border: 1px solid #bbb;
+	overflow: visible;
+	font: bold 13px arial, helvetica, sans-serif;
+	text-decoration: none;
+	white-space: nowrap;
+	color: #555;
+	width: 140px;
+
+	background-color: #ddd;
+	background-image: -webkit-gradient(
+		linear,
+		left top,
+		left bottom,
+		from(rgba(255, 255, 255, 1)),
+		to(rgba(255, 255, 255, 0))
+	);
+	background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+	background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+	background-image: -ms-linear-gradient(top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+	background-image: -o-linear-gradient(top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+	background-image: linear-gradient(top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+
+	-webkit-transition: background-color .2s ease-out;
+	-moz-transition: background-color .2s ease-out;
+	-ms-transition: background-color .2s ease-out;
+	-o-transition: background-color .2s ease-out;
+	transition: background-color .2s ease-out;
+	background-clip: padding-box; /* Fix bleeding */
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	-moz-box-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 2px 2px -1px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .3) inset;
+	-webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 2px 2px -1px rgba(0, 0, 0, .5),
+		0 1px 0 rgba(255, 255, 255, .3) inset;
+	box-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 2px 2px -1px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .3) inset;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, .9);
+
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.button:hover {
+	background-color: #eee;
+	color: #555;
+}
+
+.button:active {
+	background: #e9e9e9;
+	position: relative;
+	top: 1px;
+	text-shadow: none;
+	-moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .3) inset;
+	-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .3) inset;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, .3) inset;
+}
+
+.button[disabled],
+.button[disabled]:hover,
+.button[disabled]:active {
+	border-color: #eaeaea;
+	background: #fafafa;
+	cursor: default;
+	position: static;
+	color: #999;
+	/* Usually, !important should be avoided but here it's really needed :) */
+	-moz-box-shadow: none !important;
+	-webkit-box-shadow: none !important;
+	box-shadow: none !important;
+	text-shadow: none !important;
+}
+
+/* Smaller buttons styles */
+
+.button.small {
+	padding: 4px 12px;
+}
+
+/* Larger buttons styles */
+
+.button.large {
+	padding: 12px 30px;
+	text-transform: uppercase;
+}
+
+.button.large:active {
+	top: 2px;
+}
+
+/* Colored buttons styles */
+
+.button.red {
+	color: #fff;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, .2);
+
+	background-image: -webkit-gradient(
+		linear,
+		left top,
+		left bottom,
+		from(rgba(255, 255, 255, .3)),
+		to(rgba(255, 255, 255, 0))
+	);
+	background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, .3), rgba(255, 255, 255, 0));
+	background-image: -moz-linear-gradient(top, rgba(255, 255, 255, .3), rgba(255, 255, 255, 0));
+	background-image: -ms-linear-gradient(top, rgba(255, 255, 255, .3), rgba(255, 255, 255, 0));
+	background-image: -o-linear-gradient(top, rgba(255, 255, 255, .3), rgba(255, 255, 255, 0));
+	background-image: linear-gradient(top, rgba(255, 255, 255, .3), rgba(255, 255, 255, 0));
+}
+
+/* */
+
+.button.red {
+	background-color: #4b4848;
+	border-color: #4b4848;
+}
+
+.button.red:hover {
+	background-color: #ee5f5b;
+}
+
+.button.red:active {
+	background: #c43c35;
+}
+
+.red[disabled],
+.red[disabled]:hover,
+.red[disabled]:active {
+	border-color: #c43c35;
+	background: #c43c35;
+	color: #ffd3d3;
+}
+
+.div-style {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin: 15px;
+}
+
+.title {
+	text-align: center;
+	margin-top: 30px;
+	/* font-family: 'Roboto', sans-serif;
+	font-family: 'Oswald', sans-serif;
+	font-family: Arial, Helvetica, sans-serif; */
+	font-family: 'Montserrat', sans-serif;
+	font-weight: 400;
+	font-size: 3em;
+}
+
+.top-section {
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+}
+
+#selection {
+	height: 30px;
+	background-color: white;
+	font-size: 1em;
+}
+
+#selection2 {
+	background-color: white;
+	height: 30px;
+	font-size: 1em;
+}
+
+.selection-boxes {
+	display: flex;
+}
+
+.selection-box {
+	margin: 0 50px;
+}
+
+.display-image {
+	margin-top: 50px;
+	width: 280px;
+}
+
+.display-image:hover {
+	background-color: #000000;
+	opacity: .6;
+	transition: all ease-in-out 200ms;
+}
+
+.page {
+	display: flex;
+	justify-content: center;
+	padding-bottom: 100px;
+}
+#right-arrow {
+	width: 50px;
+	cursor: pointer;
+}
+
+#left-arrow {
+	width: 50px;
+	margin-right: 20px;
+	visibility: hidden;
+	cursor: pointer;
+}
+
+.visible {
+	visibility: visible;
+}
+
+.fa-arrow-right {
+	width: 100px;
+	cursor: pointer;
+}
+
+.img-link div {
+	position: absolute;
+	bottom: auto;
+	right: auto;
+	background: black;
+	color: white;
+	margin-bottom: 5px;
+	font-family: sans-serif;
+	opacity: 0;
+	visibility: hidden;
+	font-size: .5em;
+	-webkit-transition: visibility 0s, opacity 0.5s linear;
+	transition: visibility 0s, opacity 0.5s linear;
+}
+
+/* Hover on Parent Container */
+.img-link:hover {
+	cursor: pointer;
+}
+
+.img-link:hover div {
+	width: 300px;
+	padding: 8px 15px;
+	visibility: visible;
+	opacity: 0.9;
+}
+
+.img-link:hover p {
+	width: 300px;
+	padding: 8px 15px;
+	visibility: visible;
+	opacity: 0.9;
+}
