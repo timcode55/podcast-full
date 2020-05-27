@@ -4,8 +4,10 @@ const Rating = mongoose.model(
 	'Rating',
 	mongoose.Schema({
 		title: String,
-		// description: String,
 		rating: Number,
+		numberOfRatings: Number,
+		genre: String,
+		// description: String,
 		url: String
 	})
 );
