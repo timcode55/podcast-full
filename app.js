@@ -85,16 +85,18 @@ const array = [
 	// 'https://podcasts.apple.com/us/podcast/heres-the-sitch-with-mike-laurens/id1499164128?uo=4'
 	// 'https://podcasts.apple.com/us/podcast/epidemic-with-dr-celine-gounder-and-ronald-klain/id1499394284?uo=4'
 	// 'https://podcasts.apple.com/us/podcast/coronavirus-central/id1498528686?uo=4'
-	'https://podcasts.apple.com/us/podcast/an-arm-and-a-leg/id1438778444?uo=4'
-	// "https://podcasts.apple.com/us/podcast/outside-podcast/id1090500561?uo=4"
+	// 'https://podcasts.apple.com/us/podcast/an-arm-and-a-leg/id1438778444?uo=4'
+	// 'https://podcasts.apple.com/us/podcast/yang-speaks/id1508035243?uo=4'
+	// 'https://podcasts.apple.com/us/podcast/outside-podcast/id1090500561?uo=4'
 	// "https://podcasts.apple.com/us/podcast/naked-beauty/id1131628553?uo=4"
 	// "https://podcasts.apple.com/us/podcast/get-sleepy-sleep-meditation-and-stories/id1487513861?uo=4"
 	// "https://podcasts.apple.com/us/podcast/fitness-disrupted-with-tom-holland/id1480751239?uo=4"
 	// "https://podcasts.apple.com/us/podcast/the-wellness-mama-podcast/id886538772?uo=4"
 	// "https://podcasts.apple.com/us/podcast/the-gabby-reece-show/id1492179907?uo=4"
 	// "https://podcasts.apple.com/us/podcast/american-glutton/id1490933138?uo=4"
-	// "https://podcasts.apple.com/us/podcast/the-dr-axe-show/id1493717594?uo=4"
-	// "https://podcasts.apple.com/us/podcast/sleepy/id1349652154?uo=4"
+	// 'https://podcasts.apple.com/us/podcast/the-dr-axe-show/id1493717594?uo=4'
+	// 'https://podcasts.apple.com/us/podcast/the-school-of-greatness/id596047499?uo=4'
+	// 'https://podcasts.apple.com/us/podcast/sleepy/id1349652154?uo=4'
 	// "https://podcasts.apple.com/us/podcast/food-we-need-to-talk/id1490621476?uo=4"
 	// "https://podcasts.apple.com/us/podcast/faster-way-podcast/id1489399975?uo=4"
 	// "https://podcasts.apple.com/us/podcast/heal-survive-thrive/id1438033349?uo=4"
@@ -117,6 +119,26 @@ const array = [
 	// "https://podcasts.apple.com/us/podcast/doing-this-for-you-tone-and-sculpt/id1465737552?uo=4"
 	// "https://podcasts.apple.com/us/podcast/danica-patrick-pretty-intense-podcast/id1465014169?uo=4"
 	// "https://podcasts.apple.com/us/podcast/goopfellas/id1459400887?uo=4"
+	//   "https://podcasts.apple.com/us/podcast/missing-in-alaska/id1506816225?uo=4"
+	// "https://podcasts.apple.com/us/podcast/black-history-year/id1471015571?uo=4"
+	// "https://podcasts.apple.com/us/podcast/the-dissenters-with-debra-messing-and-mandana-dayani/id1510623465?uo=4"
+	// "https://podcasts.apple.com/us/podcast/no-stupid-questions/id1510056899?uo=4"
+	// "https://podcasts.apple.com/us/podcast/rzim-let-my-people-think-broadcasts/id1174079089?uo=4"
+	// "https://podcasts.apple.com/us/podcast/ten-percent-happier-with-dan-harris/id1087147821?uo=4"
+	// "https://podcasts.apple.com/us/podcast/the-dream-team-tapes-with-jack-mccallum/id1498713408?uo=4"
+	// "https://podcasts.apple.com/us/podcast/the-daily-smile/id1511191961?uo=4"
+	// "https://podcasts.apple.com/us/podcast/the-last-archive/id1506207997?uo=4"
+	// "https://podcasts.apple.com/us/podcast/disappearing-spoon-a-science-history-podcast-by-sam-kean/id1506994358?uo=4"
+	// 'https://podcasts.apple.com/us/podcast/radio-headspace/id1510981488?uo=4'
+	'https://podcasts.apple.com/us/podcast/living-with-landyn-with-landyn-hutchinson/id1504075237?uo=4'
+	// "https://podcasts.apple.com/us/podcast/unfictional/id393433206?uo=4"
+	// "https://podcasts.apple.com/us/podcast/real-narcos/id1504486636?uo=4"
+	// "https://podcasts.apple.com/us/podcast/the-trey-gowdy-podcast/id1509074854?uo=4"
+	// "https://podcasts.apple.com/us/podcast/team-deakins/id1510638084?uo=4"
+	// "https://podcasts.apple.com/us/podcast/annie-and-eddie-keep-talking/id1510645180?uo=4"
+	// 'https://podcasts.apple.com/us/podcast/the-darkest-timeline-with-ken-jeong-joel-mchale/id1504921890?uo=4'
+	// 'https://podcasts.apple.com/us/podcast/the-dan-bongino-show/id965293227?uo=4'
+	// 'https://podcasts.apple.com/us/podcast/motive-for-murder/id1510365500?uo=4'
 ];
 
 async function main() {
@@ -148,7 +170,7 @@ async function main() {
 		ratings.each((i, element) => {
 			const rating = $(element).text().trim();
 			// console.log(rating);
-			object['rating'] = Number(rating);
+			object['rating'] = rating;
 		});
 		genre.each((i, element) => {
 			const genre = $(element).text().trim();
@@ -156,8 +178,15 @@ async function main() {
 			object['genre'] = genre;
 		});
 		numberOfRatings.each((i, element) => {
-			const numberOfRatings = parseInt($(element, i).text().trim());
-			console.log(parseInt(numberOfRatings));
+			let numberOfRatings = $(element, i).text().split(' ')[0];
+			for (let i = 0; i < numberOfRatings.length; i++) {
+				if (numberOfRatings[i] === 'K') {
+					numberOfRatings = parseFloat(numberOfRatings) * 1000;
+				} else {
+					numberOfRatings;
+				}
+			}
+			console.log(numberOfRatings);
 			object['numberOfRatings'] = numberOfRatings;
 		});
 		// console.log(object);
