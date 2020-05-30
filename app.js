@@ -130,8 +130,8 @@ const array = [
 	// "https://podcasts.apple.com/us/podcast/the-last-archive/id1506207997?uo=4"
 	// "https://podcasts.apple.com/us/podcast/disappearing-spoon-a-science-history-podcast-by-sam-kean/id1506994358?uo=4"
 	// 'https://podcasts.apple.com/us/podcast/radio-headspace/id1510981488?uo=4'
-	'https://podcasts.apple.com/us/podcast/living-with-landyn-with-landyn-hutchinson/id1504075237?uo=4'
-	// "https://podcasts.apple.com/us/podcast/unfictional/id393433206?uo=4"
+	// 'https://podcasts.apple.com/us/podcast/living-with-landyn-with-landyn-hutchinson/id1504075237?uo=4'
+	'https://podcasts.apple.com/us/podcast/unfictional/id393433206?uo=4'
 	// "https://podcasts.apple.com/us/podcast/real-narcos/id1504486636?uo=4"
 	// "https://podcasts.apple.com/us/podcast/the-trey-gowdy-podcast/id1509074854?uo=4"
 	// "https://podcasts.apple.com/us/podcast/team-deakins/id1510638084?uo=4"
@@ -189,7 +189,6 @@ async function main() {
 			console.log(numberOfRatings);
 			object['numberOfRatings'] = numberOfRatings;
 		});
-		// console.log(object);
 
 		const podRating = new Rating({
 			title: object.title,
@@ -207,6 +206,7 @@ async function main() {
 		} else {
 			console.log('item already exists');
 		}
+		// console.log(object);
 
 		const allPods = await Rating.find();
 		let result = JSON.stringify(allPods);
@@ -256,6 +256,11 @@ app.get('/podcasts', async (req, res) => {
 	} catch (e) {
 		res.status(500).send();
 	}
+});
+app.use(express.static(path.join(__dirname, 'static')));
+
+app.get('/podcasts/index', function(req, res) {
+	res.sendFile(path.join(__dirname + '/static/index.html'));
 });
 
 app.get('/podcasts/:id', async (req, res) => {

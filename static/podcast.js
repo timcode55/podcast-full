@@ -185,6 +185,8 @@ function displayData(data) {
 		b = document.createElement('a');
 		c = document.createElement('a');
 		b.href = item[2];
+		a.setAttribute('target', '_blank');
+		b.setAttribute('target', '_blank');
 		a.classList = 'pod-infoLink';
 		c.classList = 'img-link';
 		a.innerHTML = `
@@ -192,7 +194,7 @@ function displayData(data) {
 		b.innerHTML = `
           <button class="button red webLink">Website</button>`;
 		c.innerHTML = `
-          <img class="img display-image" src=${item[0]}></img><br><div class ="toolTip">${item[3]
+          <a href="${item[1]}" target="_blank"><img class="img display-image" src=${item[0]}></a></img><br><div class ="toolTip">${item[3]
 			.substring(0, 800)
 			.replace(/(<([^>]+)>)/gi, '')}</div>`;
 		// console.log(item[3]);
