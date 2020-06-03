@@ -117,7 +117,6 @@
 	cursor: default;
 	position: static;
 	color: #999;
-	/* Usually, !important should be avoided but here it's really needed :) */
 	-moz-box-shadow: none !important;
 	-webkit-box-shadow: none !important;
 	box-shadow: none !important;
@@ -298,4 +297,14 @@
 	padding: 8px 15px;
 	visibility: visible;
 	opacity: 0.9;
+}
+
+.rating-overlay {
+	z-index: 5;
+	background-color: #4b4848;
+	color: white;
+	font-weight: 800;
+	font-size: .4em;
+	width: 50px;
+	height: 30px;
 }

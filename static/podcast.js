@@ -129,9 +129,12 @@ function getTopPodcastsByGenre(genreId, page) {
 			credentials: 'same-origin'
 		}
 	).then((response) => {
-		response.json().then((data) => {
+		response.json().then(async (data) => {
 			displayData(data);
-			getItunesLink(data);
+			const list = await getItunesLink(data);
+			axios.post('/podcasts', { urls: list }).then(function(response) {
+				console.log(response);
+			});
 		});
 	});
 }
@@ -149,7 +152,7 @@ async function getItunesLink(data) {
 		let iTunesId = array[i].itunes_id;
 		console.log(iTunesId);
 		const testingData = await axios
-			.get('http://localhost:4000/podcast_data?id=' + iTunesId)
+			.get('/podcast_data?id=' + iTunesId)
 			.then((response) => {
 				newerArray.push(response.data.results[0].trackViewUrl);
 			})
@@ -160,15 +163,18 @@ async function getItunesLink(data) {
 	document.querySelectorAll('.div-style a.pod-infoLink').forEach((el, i) => {
 		el.href = newerArray[i];
 	});
+	return newerArray;
 }
 
 function displayData(data) {
 	let display = document.querySelector('.listen');
 	display.innerHTML = ``;
 	let array = data.podcasts;
-	let resultsArray = [];
 
-	console.log(newerArray);
+	let resultsArray = [];
+	// console.log(newerArray);
+
+	// console.log(newerArray);
 	for (let i = 0; i < array.length; i++) {
 		resultsArray.push([ array[i].image, array[i].listennotes_url, array[i].website, array[i].description ]);
 	}
@@ -196,7 +202,7 @@ function displayData(data) {
 		c.innerHTML = `
           <a href="${item[1]}" target="_blank"><img class="img display-image" src=${item[0]}></a></img><br><div class ="toolTip">${item[3]
 			.substring(0, 800)
-			.replace(/(<([^>]+)>)/gi, '')}</div>`;
+			.replace(/(<([^>]+)>)/gi, '')}</div><button class="rating-overlay">4.7</button>`;
 		// console.log(item[3]);
 		div.appendChild(c);
 		div.appendChild(a);

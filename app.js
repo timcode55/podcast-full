@@ -131,9 +131,9 @@ const array = [
 	// "https://podcasts.apple.com/us/podcast/disappearing-spoon-a-science-history-podcast-by-sam-kean/id1506994358?uo=4"
 	// 'https://podcasts.apple.com/us/podcast/radio-headspace/id1510981488?uo=4'
 	// 'https://podcasts.apple.com/us/podcast/living-with-landyn-with-landyn-hutchinson/id1504075237?uo=4'
-	'https://podcasts.apple.com/us/podcast/unfictional/id393433206?uo=4'
-	// "https://podcasts.apple.com/us/podcast/real-narcos/id1504486636?uo=4"
-	// "https://podcasts.apple.com/us/podcast/the-trey-gowdy-podcast/id1509074854?uo=4"
+	// 'https://podcasts.apple.com/us/podcast/unfictional/id393433206?uo=4'
+	// 'https://podcasts.apple.com/us/podcast/real-narcos/id1504486636?uo=4'
+	'https://podcasts.apple.com/us/podcast/the-trey-gowdy-podcast/id1509074854?uo=4'
 	// "https://podcasts.apple.com/us/podcast/team-deakins/id1510638084?uo=4"
 	// "https://podcasts.apple.com/us/podcast/annie-and-eddie-keep-talking/id1510645180?uo=4"
 	// 'https://podcasts.apple.com/us/podcast/the-darkest-timeline-with-ken-jeong-joel-mchale/id1504921890?uo=4'
@@ -141,11 +141,11 @@ const array = [
 	// 'https://podcasts.apple.com/us/podcast/motive-for-murder/id1510365500?uo=4'
 ];
 
-async function main() {
-	for (let i = 0; i < array.length; i++) {
+async function main(list) {
+	for (let i = 0; i < list.length; i++) {
 		// console.log(array[i]);
 
-		const html = await request.get(`${array[i]}`);
+		const html = await request.get(`${list[i]}`);
 		// console.log(html);
 		const $ = await cheerio.load(html);
 		let object = {};
@@ -242,7 +242,7 @@ async function sleep(milliseconds) {
 	return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 
-main();
+// main();
 
 // app.get('/podcast', (req, res) => {
 // 	// res.sendFile(path.join(__dirname + '/index.html'));
@@ -275,6 +275,12 @@ app.get('/podcasts/:id', async (req, res) => {
 	} catch (e) {
 		res.status(500).send();
 	}
+});
+
+app.post('/podcasts', (req, res) => {
+	console.log(req.body);
+	main(req.body.urls);
+	res.send({ status: 'ok' });
 });
 
 app.listen(PORT, () => {
