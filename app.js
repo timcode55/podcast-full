@@ -156,7 +156,7 @@ async function main(list) {
 		// const description = $('#ember381 > p');
 		// const descriptions = $('[name="ember-cli-head-start"]');
 		// console.log(descriptions);
-		await sleep(1000);
+		await sleep(200);
 		titles.each((i, element) => {
 			const title = $(element).text().trim();
 			// console.log(title);
@@ -257,6 +257,16 @@ app.get('/podcasts', async (req, res) => {
 		res.status(500).send();
 	}
 });
+
+app.get('/rating', async (req, res) => {
+	try {
+		const rating = await Rating.findOne({ title: 'Base Layer' }, { rating: 1.0 });
+		res.send(podcast);
+	} catch (e) {
+		res.status(500).send();
+	}
+});
+
 app.use(express.static(path.join(__dirname, 'static')));
 
 app.get('/podcasts/index', function(req, res) {
