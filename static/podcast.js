@@ -133,10 +133,10 @@ function getTopPodcastsByGenre(genreId, page) {
 			displayData(data);
 
 			// SCRAPE DATA AND ADD TO DATABASE
-			// const list = await getItunesLink(data);
-			// axios.post('/podcasts', { urls: list }).then(function(response) {
-			// 	// console.log(response);
-			// });
+			const list = await getItunesLink(data);
+			axios.post('/podcasts', { urls: list }).then(function(response) {
+				// console.log(response);
+			});
 		});
 	});
 }
