@@ -146,9 +146,9 @@ getTopPodcastsByGenre();
 let newerArray = [];
 async function getItunesLink(data) {
 	// DISPLAY ITUNES LINKS ON DEFAULT MAIN PAGE
-	document.querySelectorAll('.div-style a.img-link').forEach((el, i) => {
-		el.href = newerArray[i];
-	});
+	// document.querySelectorAll('.div-style a.img-link').forEach((el, i) => {
+	// 	el.href = newerArray[i];
+	// });
 	let array = data.podcasts;
 	for (let i = 0; i < array.length; i++) {
 		let iTunesId = array[i].itunes_id;
@@ -157,168 +157,21 @@ async function getItunesLink(data) {
 			.get('/podcast_data?id=' + iTunesId)
 			.then((response) => {
 				newerArray.push(response.data.results[0].trackViewUrl);
+				document.querySelectorAll('.rating-container button.button.red.info a')[i].href = 'www.google.com';
 			})
 			.catch((error) => {
 				newerArray.push('');
 			});
 	}
-	document.querySelectorAll('.div-style a.pod-infoLink').forEach((el, i) => {
-		el.href = newerArray[i];
-		// getData(data);
-	});
+	console.log(newerArray);
+	// document.querySelectorAll('.rating-container button.button.red.info').forEach((el, i) => {
+	// 	el.href = newerArray[i];
+	// 	// getData(data);
+	// });
 	return newerArray;
 }
-// let ratingArray = [];
-// async function getData(data) {
-// 	// console.log(data);
-// 	let ratingAdd = data.podcasts;
-// 	let dataArray = Object.values(data)[3];
-// 	let titleArray = [];
-// 	for (let item of dataArray) {
-// 		titleArray.push(item.title);
-// 	}
-// console.log(titleArray);
 
-// console.log('ratingarray', ratingArray);
-// for (let i = 0; i < ratingAdd.length; i++) {
-// 	for (let item of ratingArray) {
-// 		for (let i of item) {
-// 			console.log('i.title', i.title);
-// 			if (i.title === ratingAdd[i].title) {
-// 				i.newRating = ratingAdd[i].rating;
-// 				console.log(i);
-// 			}
-// 		}
-// 	}
-// 	// console.log(ratingAdd[i]);
-// 	// console.log('ratingadd.title', ratingAdd[i].title);
-// 	// if (ratingAdd)
-// }
-// let array = data.podcasts;
-// console.log(array);
-
-// console.log(ratingData[1].title);
-// console.log(ratingData);
-// for (let item of ratingData) {
-// 	// console.log(item);
-// }
-// console.log(data.podcasts[0].title);
-
-// let ratingNumArray = [];
-// for (let i = 0; i < titleArray.length; i++) {
-// 	for (let item of ratingData) {
-// 		if (item.title === titleArray[i]) {
-// 			ratingNumArray.push([ item.title, item.rating ]);
-// 		}
-// 	}
-// }
-
-// for (let j = 0; j < ratingNumArray.length; j++) {
-// 	let testResult = ratingAdd.map((item) => {
-// 		return (item.newRating = ratingNumArray[j]);
-// 	});
-// 	console.log(testResult);
-// }
-
-// for (let item of ratingNumArray) {
-// 	console.log(item);
-// 	// let findRating = ratingArray.find
-
-// 	// console.log(item);
-// }
-// displayRating(ratingNumArray);
-// ratingArray.push(ratingData);
-// console.log(ratingArray);
-// let result = ratingArray.map((el) => ({
-// 	...el,
-// 	newRating: 1.2
-// }));
-// console.log(ratingArray);
-// console.log(result);
-// }
-// getData();
-// 	for (let i = 0; i < array.length; i++) {
-// 		ratingArray.push([ array[i].title ]);
-// 	}
-// 	console.log(ratingArray);
-// 	let find = ratingData.find((post, index) => {
-// 		// if(post.title === )
-// 	});
-// 	displayRating(ratingData);
-// }
-// // getData();
-
-// function displayRating(ratingNumArray) {
-// 	// console.log(ratingNumArray);
-// 	let ratingId = document.querySelector('.div-style').firstChild.id;
-// 	// console.log(ratingId);
-// 	let test = document.querySelectorAll('.rating-overlay');
-// 	for (let item of ratingNumArray) {
-// 		// console.log(item);
-// 		// console.log(item);
-// 	}
-// 	test.forEach((item) => {
-// 		// let addTo = ratingNumArray.map((item) => {
-// 		// 	return item[1];
-// 		// });
-// 		item.textContent = ratingNumArray.shift()[1];
-// 	});
-
-// function displayRating(ratingNumArray) {
-//   console.log(ratingNumArray);
-//   let ratingId = document.querySelector('.div-style').firstChild.id;
-//   console.log(ratingId);
-//   let test = document.querySelectorAll('.rating-overlay');
-//   for (let item of test) {
-//     item.textContent = ratingNumArray.pop()[1];
-//   }
-// }
-
-// for (let t = 0; t < ratingData.length; t++) {
-// 	if (ratingId === ratingData[t].title) {
-// 		// console.log('this shit works');
-// 		// test.textContent = ratingData[t].rating;
-// 	} else {
-// 		// console.log('fuck');
-// 	}
-// }
-
-// let test2 = document.querySelectorAll('.rating-overlay');
-// let inside = test2.textContent;
-// test.textContent = 1.3;
-// console.log(test);
-// console.log(test2);
-// test.textContent = 'nope';
-// let addRating = document.querySelector('.display-image');
-// let d = document.createElement('d');
-// d.innerHTML = `<button class="rating-overlay">4.7</button>`;
-// addRating.parentNode.insertBefore(d, addRating.nextSibling);
-// for (let i = 0; i < test2.length; i++) {
-// 	for (let j = 0; j < ratingData.length; j++) {
-// 		// console.log(ratingData[j].title);
-// 		if (ratingData[j].title === ratingId) {
-// 			test.textContent = 'nope';
-// 		}
-// 	}
-// let ratingId = document.querySelector('.div-style').firstChild.id;
-// console.log(ratingId);
-// console.log(test2[3].innerText);
-// num = 1;
-// test2[i].innerText = num;
-// num++;
-// test2[i].textContent = ratingData.rating;
-// }
-
-// for (let i = 0; i < ratingData.length; i++) {
-// 	console.log(ratingId, ratingData[i].title);
-// 	if (ratingId === ratingData[i].title) {
-// 		ratingDisplay.textContent = ratingData[i].rating;
-// 	} else {
-// 		ratingDisplay.textContent = 'nope';
-// 	}
-// }
-// }
-
+let fullPodcastData;
 async function displayData(data) {
 	// for (let item of data) {
 	// 	item.push({ test: 1 });
@@ -329,13 +182,14 @@ async function displayData(data) {
 	// }
 	// console.log(ratingArray);
 	// let ratingSubArray = [];
-
+	const response = await fetch('/podcasts');
+	fullPodcastData = fullPodcastData || (await response.json());
+	// console.log(ratingData);
+	let ratingData = fullPodcastData;
 	console.log(data);
 	for (let pod of data.podcasts) {
 		// console.log(pod);
-		const response = await fetch('/podcasts');
-		const ratingData = await response.json();
-		// console.log(ratingData);
+
 		for (let item of ratingData) {
 			if (item.title === pod.title) {
 				pod.newRating = item.rating;
@@ -343,44 +197,10 @@ async function displayData(data) {
 			}
 		}
 	}
-	// console.log(data);
-	// console.log(ratingNumArray);
-
-	// console.log(pod);
-	// let dataArray = Object.values(data)[3];
-	// let titleArray = [];
-	// for (let item of dataArray) {
-	// 	titleArray.push(item.title);
-	// }
-	// console.log(titleArray);
-	// for (let item of ratingArray) {
-	// 	for (let i of item) {
-	// 		console.log(i);
-	// 	}
-	// }
-	// console.log('ratingArray', ratingArray);
-
-	// function getTitle(item) {
-	// 	return item.title === 'Intel Chip Chat';
-	// }
-
-	// console.log(ratingArray.find(getTitle));
-	// let found = ratingArray.find((post, index) => {
-	// 	if (ratingArray[1].title === 'Data Engineering Podcast') {
-	// 		console.log('data enginnering is in here!');
-	// 	}
-	// });
 
 	let display = document.querySelector('.listen');
 	display.innerHTML = ``;
 	let array = data.podcasts;
-
-	// for (let item of ratingArray) {
-	// 	console.log(item);
-	// }
-
-	// let displayRating = ratingArray[1].rating;
-	// console.log(displayRating);
 	// console.log(array);
 	let resultsArray = [];
 	// console.log(newerArray);
@@ -397,7 +217,7 @@ async function displayData(data) {
 			array[i].numberOfRatings
 		]);
 	}
-	for (let item of resultsArray) {
+	for (let [ i, item ] of resultsArray.entries()) {
 		console.log(item);
 		let displayImage = document.createElement('img');
 		// let toolTip = document.createElement('div');
@@ -418,7 +238,9 @@ async function displayData(data) {
 		c.classList = 'img-link';
 		c.setAttribute('id', `${item[4]}`);
 		a.innerHTML = `
-    <div class="rating-container"><button class="rating-overlay">${item[5]}</button><button class="number-ratings"># of ratings ${item[6]}</button><button class="button red info"><a href="${item[2]}" target="_blank">Podcast Info</button></a></div>`;
+    <div class="rating-container"><button class="rating-overlay">${item[5]}</button><button class="number-ratings"># of ratings ${item[6]}</button><button class="button red info"><a href="${newerArray[
+			i
+		]}"target="_blank">Podcast Info</button></a></div>`;
 		b.innerHTML = `
           <button class="button red webLink">Website</button>`;
 		c.innerHTML = `
@@ -460,9 +282,3 @@ leftArrow.addEventListener('click', (e) => {
 		document.body.scrollTop = document.documentElement.scrollTop = 0;
 	}, 500);
 });
-
-// function changeRating() {
-// 	let testAgain = document.querySelectorAll('.rating-overlay').innerHTML;
-// 	console.log(testAgain);
-// }
-// changeRating();
