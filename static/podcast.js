@@ -133,10 +133,11 @@ function getTopPodcastsByGenre(genreId, page) {
 			displayData(data);
 
 			// SCRAPE DATA AND ADD TO DATABASE
-			const list = await getItunesLink(data);
-			axios.post('/podcasts', { urls: list }).then(function(response) {
-				// console.log(response);
-			});
+			getItunesLink(data);
+			// const list = await getItunesLink(data);
+			// axios.post('/podcasts', { urls: list }).then(function(response) {
+			// 	// console.log(response);
+			// });
 		});
 	});
 }
@@ -157,20 +158,20 @@ async function getItunesLink(data) {
 			.get('/podcast_data?id=' + iTunesId)
 			.then((response) => {
 				newerArray.push(response.data.results[0].trackViewUrl);
-				document.querySelectorAll('.rating-container button.button.red.info a')[i].href = 'www.google.com';
+				// document.querySelectorAll('.rating-container button.button.red.info a')[i].href = newerArray[i];
 			})
 			.catch((error) => {
 				newerArray.push('');
 			});
 	}
-	console.log(newerArray);
+
 	// document.querySelectorAll('.rating-container button.button.red.info').forEach((el, i) => {
 	// 	el.href = newerArray[i];
 	// 	// getData(data);
 	// });
 	return newerArray;
 }
-
+console.log(newerArray);
 let fullPodcastData;
 async function displayData(data) {
 	// for (let item of data) {
@@ -201,9 +202,13 @@ async function displayData(data) {
 	let display = document.querySelector('.listen');
 	display.innerHTML = ``;
 	let array = data.podcasts;
-	// console.log(array);
+	console.log(array);
 	let resultsArray = [];
 	// console.log(newerArray);
+	for (let item of array) {
+		item.itunesURL = newerArray.shift();
+	}
+	console.log(array);
 
 	console.log(newerArray);
 	for (let i = 0; i < array.length; i++) {
@@ -214,9 +219,11 @@ async function displayData(data) {
 			array[i].description,
 			array[i].title,
 			array[i].newRating,
-			array[i].numberOfRatings
+			array[i].numberOfRatings,
+			array[i].itunesURL
 		]);
 	}
+	console.log(resultsArray);
 	for (let [ i, item ] of resultsArray.entries()) {
 		console.log(item);
 		let displayImage = document.createElement('img');
@@ -237,10 +244,9 @@ async function displayData(data) {
 		a.classList = 'pod-infoLink';
 		c.classList = 'img-link';
 		c.setAttribute('id', `${item[4]}`);
+		console.log(newerArray);
 		a.innerHTML = `
-    <div class="rating-container"><button class="rating-overlay">${item[5]}</button><button class="number-ratings"># of ratings ${item[6]}</button><button class="button red info"><a href="${newerArray[
-			i
-		]}"target="_blank">Podcast Info</button></a></div>`;
+    <div class="rating-container"><button class="rating-overlay">${item[5]}</button><button class="number-ratings"># of ratings ${item[6]}</button><button class="button red info"><a href="${item[7]}"target="_blank">Podcast Info</button></a></div>`;
 		b.innerHTML = `
           <button class="button red webLink">Website</button>`;
 		c.innerHTML = `
