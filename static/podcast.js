@@ -225,7 +225,7 @@ async function displayData(data) {
 	}
 	console.log(resultsArray);
 	for (let [ i, item ] of resultsArray.entries()) {
-		console.log(item);
+		// console.log(item);
 		let displayImage = document.createElement('img');
 		// let toolTip = document.createElement('div');
 		displayImage.classList.add('display-image');
