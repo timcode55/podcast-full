@@ -280,5 +280,3 @@ leftArrow.addEventListener('click', (e) => {
 		document.body.scrollTop = document.documentElement.scrollTop = 0;
 	}, 500);
 });
-
-// Right after paste
