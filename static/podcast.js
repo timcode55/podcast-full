@@ -152,18 +152,19 @@ async function getItunesLink(data) {
 	let array = data.podcasts;
 	for (let i = 0; i < array.length; i++) {
 		let iTunesId = array[i].itunes_id;
-		console.log(iTunesId);
+		// console.log(iTunesId);
 		const testingData = await axios
 			.get('/podcast_data?id=' + iTunesId)
 			.then((response) => {
+				console.log(response);
 				newerArray.push(response.data.results[0].trackViewUrl);
 				// document.querySelectorAll('.rating-container button.button.red.info a')[i].href = 'www.google.com';
 			})
 			.catch((error) => {
-				newerArray.push('');
+				newerArray.push('https://podcasts.apple.com');
 			});
 	}
-	console.log(newerArray);
+	console.log(newerArray.length);
 	// document.querySelectorAll('.rating-container button.button.red.info').forEach((el, i) => {
 	// 	el.href = newerArray[i];
 	// 	// getData(data);
@@ -188,12 +189,14 @@ async function displayData(data) {
 	let ratingData = fullPodcastData;
 	console.log(data);
 	for (let pod of data.podcasts) {
-		// console.log(pod);
+		console.log(pod);
 
 		for (let item of ratingData) {
 			if (item.title === pod.title) {
+				console.log(item);
 				pod.newRating = item.rating;
 				pod.numberOfRatings = item.numberOfRatings;
+				pod.url = item.url;
 			}
 		}
 	}
@@ -203,9 +206,9 @@ async function displayData(data) {
 	let array = data.podcasts;
 	// console.log(array);
 	let resultsArray = [];
-	// console.log(newerArray);
+	console.log(newerArray.length);
 
-	console.log(newerArray);
+	console.log(newerArray.length);
 	for (let i = 0; i < array.length; i++) {
 		resultsArray.push([
 			array[i].image,
@@ -214,7 +217,8 @@ async function displayData(data) {
 			array[i].description,
 			array[i].title,
 			array[i].newRating,
-			array[i].numberOfRatings
+			array[i].numberOfRatings,
+			array[i].url
 		]);
 	}
 	for (let [ i, item ] of resultsArray.entries()) {
@@ -230,10 +234,13 @@ async function displayData(data) {
 		a = document.createElement('a');
 		b = document.createElement('a');
 		c = document.createElement('a');
+		// d = document.createElement('a');
 		b.href = item[2];
+
 		// console.log(ratingArray);
 		a.setAttribute('target', '_blank');
 		b.setAttribute('target', '_blank');
+		// d.setAttribute('target', '_blank');
 		a.classList = 'pod-infoLink';
 		c.classList = 'img-link';
 		c.setAttribute('id', `${item[4]}`);
@@ -245,10 +252,13 @@ async function displayData(data) {
           <a href="${item[1]}" target="_blank"><img class="img display-image" src=${item[0]}></a></img><br><div class ="toolTip">${item[3]
 			.substring(0, 800)
 			.replace(/(<([^>]+)>)/gi, '')}</div>`;
+
+		// d.innerHTML = `<button class="button test"><a href=""target="_blank">Podcast Test</button></a>`;
 		// console.log(item[3]);
 		div.appendChild(c);
 		div.appendChild(a);
 		div.appendChild(b);
+		// div.appendChild(d);
 		display.classList.add('block');
 		display.appendChild(div);
 		// getData(data);

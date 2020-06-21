@@ -1,16 +1,23 @@
 const mongoose = require('mongoose');
 require('./db/mongoose');
+const dotenv = require('dotenv');
 const cheerio = require('cheerio');
 const request = require('request-promise');
 let express = require('express');
 const path = require('path');
 let mongodb = require('mongodb');
 const Rating = require('./db/Rating');
+const connectDB = require('./db/mongoose');
+
+// Load env vars
+dotenv.config({ path: './config.env' });
 
 let app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'static')));
 const PORT = process.env.PORT || 4000;
+
+connectDB();
 
 app.use((req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*');
@@ -143,7 +150,7 @@ const array = [
 
 async function main(list) {
 	for (let i = 0; i < list.length; i++) {
-		// console.log(array[i]);
+		// console.log(list[i]);
 
 		const html = await request.get(`${list[i]}`);
 		// console.log(html);
@@ -189,14 +196,15 @@ async function main(list) {
 			console.log(numberOfRatings);
 			object['numberOfRatings'] = numberOfRatings;
 		});
-
+		console.log(list);
+		console.log(list[i]);
 		const podRating = new Rating({
 			title: object.title,
 			rating: object.rating,
 			numberOfRatings: object.numberOfRatings,
 			genre: object.genre,
 			// description: object.description,
-			url: array[i]
+			url: list[i] || ''
 		});
 		const podFromDb = await Rating.findOne({ title: object.title });
 		console.log(podFromDb);
