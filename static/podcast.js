@@ -204,7 +204,11 @@ async function displayData(data) {
 				if (itemTrimTitle === itemPodTitle) {
 					console.log(itemTrimTitle);
 					console.log(itemPodTitle);
-					pod.newRating = item.rating || 'N/A';
+					if (item.rating === undefined) {
+						pod.newRating = 'N/A';
+					} else {
+						pod.newRating = item.rating;
+					}
 					pod.numberOfRatings = item.numberOfRatings || 'N/A';
 					pod.url = item.url;
 				}

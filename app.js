@@ -155,78 +155,101 @@ let testArray = [];
 async function main(list) {
 	for (let i = 0; i < list.length; i++) {
 		console.log(list[i]);
-
-		const html = await request.get(`${list[i]}`);
-		// console.log(html);
-		const $ = await cheerio.load(html);
-		let object = {};
-		const titles = $('.product-header__title');
-		const ratings = $('.we-customer-ratings__averages__display');
-		const genre = $('.inline-list__item--bulleted');
-		const numberOfRatings = $('p.we-customer-ratings__count');
-		// const description = $('#ember381 > p');
-		// const descriptions = $('[name="ember-cli-head-start"]');
-		// console.log(descriptions);
-		await sleep(200);
-		titles.each((i, element) => {
-			const title = $(element).text().trim();
-			object['title'] = title;
-		});
-
-		ratings.each((i, element) => {
-			const rating = $(element).text().trim();
-			// console.log(rating);
-			object['rating'] = rating;
-		});
-		genre.each((i, element) => {
-			const genre = $(element).text().trim();
-			// console.log(rating);
-			object['genre'] = genre;
-		});
-		numberOfRatings.each((j, element) => {
-			let numberOfRatings = $(element, j).text().split(' ')[0];
-			for (let i = 0; i < numberOfRatings.length; i++) {
-				if (numberOfRatings[i] === 'K') {
-					numberOfRatings = parseFloat(numberOfRatings) * 1000;
-				} else {
-					numberOfRatings;
-				}
-			}
-			console.log(numberOfRatings);
-			object['numberOfRatings'] = numberOfRatings;
-		});
-		const podRating = new Rating({
-			title: object.title,
-			rating: object.rating,
-			numberOfRatings: object.numberOfRatings,
-			genre: object.genre,
-			url: list[i] || ''
-		});
-		const podFromDb = await Rating.findOne({ title: object.title });
-		console.log(podRating);
 		try {
-			if (!podFromDb) {
-				try {
-					testArray.push(podRating);
-					console.log("item doesn't exist, I'll add it");
-					podRating.save();
-				} catch (error) {
-					console.log('PROBLEM', error);
+			const html = await request.get(`${list[i]}`);
+
+			// const html = await request.get(`${list[i]}`);
+			// // console.log(html);
+			const $ = await cheerio.load(html);
+			let object = {};
+			const titles = $('.product-header__title');
+			const ratings = $('.we-customer-ratings__averages__display');
+			const genre = $('.inline-list__item--bulleted');
+			const numberOfRatings = $('p.we-customer-ratings__count');
+			// const description = $('#ember381 > p');
+			// const descriptions = $('[name="ember-cli-head-start"]');
+			// console.log(descriptions);
+			await sleep(200);
+			titles.each((i, element) => {
+				const title = $(element).text().trim();
+				object['title'] = title;
+			});
+
+			ratings.each((i, element) => {
+				const rating = $(element).text().trim();
+				// console.log(rating);
+				object['rating'] = rating;
+			});
+			genre.each((i, element) => {
+				const genre = $(element).text().trim();
+				// console.log(rating);
+				object['genre'] = genre;
+			});
+			numberOfRatings.each((j, element) => {
+				let numberOfRatings = $(element, j).text().split(' ')[0];
+				for (let i = 0; i < numberOfRatings.length; i++) {
+					if (numberOfRatings[i] === 'K') {
+						numberOfRatings = parseFloat(numberOfRatings) * 1000;
+					} else {
+						numberOfRatings;
+					}
 				}
-			} else {
-				console.log('item already exists');
+				console.log(numberOfRatings);
+				object['numberOfRatings'] = numberOfRatings;
+			});
+			const podRating = new Rating({
+				title: object.title,
+				rating: object.rating,
+				numberOfRatings: object.numberOfRatings,
+				genre: object.genre,
+				url: list[i] || ''
+			});
+
+			const podFromDb = await Rating.findOne({ title: object.title });
+			// console.log(podRating);
+			try {
+				if (!podFromDb) {
+					console.log('not in DB', podFromDb);
+					try {
+						testArray.push(podRating);
+						console.log("item doesn't exist, I'll add it");
+						podRating.save();
+					} catch (error) {
+						console.log('PROBLEM', error);
+					}
+				} else {
+					console.log('item already exists, Ill update it.');
+					try {
+						podFromDb.updateOne(
+							// $set: { rating: object.rating },
+							{ title: 'I Survived' },
+							{ $set: { rating: 1.0 } }
+							// $set: { numberOfRatings: object.numberOfRatings }
+							// title: object.title,
+							// rating: object.rating,
+							// numberOfRatings: object.numberOfRatings,
+							// genre: object.genre,
+							// url: list[i] || ''
+						);
+						console.log('in DB after update', podFromDb);
+					} catch (e) {
+						console.log(e);
+					}
+				}
+			} catch (err) {
+				console.log(err);
 			}
-		} catch (err) {
-			console.log(err);
+			const allPods = await Rating.find();
+			let result = JSON.stringify(allPods);
+			// console.log(allPods);
+
+			app.get('/api/podcasts', (req, res) => {
+				res.send(result);
+			});
+		} catch (e) {
+			console.log(e);
+			continue;
 		}
-
-		const allPods = await Rating.find();
-		let result = JSON.stringify(allPods);
-		// console.log(allPods);
-
-		app.get('/api/podcasts', (req, res) => {
-			res.send(result);
-		});
 	}
 }
 
