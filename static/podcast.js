@@ -10,7 +10,6 @@ function getCategories() {
 		credentials: 'same-origin'
 	}).then((response) => {
 		response.json().then((data) => {
-			console.log(data);
 			let genreSelector = document.getElementById('selection');
 			let genreSelector2 = document.getElementById('selection2');
 			let fullArray = [];
@@ -132,12 +131,6 @@ function getTopPodcastsByGenre(genreId, page) {
 	).then((response) => {
 		response.json().then(async (data) => {
 			displayData(data);
-
-			// SCRAPE DATA AND ADD TO DATABASE
-			const list = await getItunesLink(data);
-			axios.post('/podcasts', { urls: list }).then(function(response) {
-				// console.log(response);
-			});
 		});
 	});
 }
@@ -146,55 +139,28 @@ getTopPodcastsByGenre();
 // GET ITUNES LINK DATA
 let newerArray = [];
 async function getItunesLink(data) {
-	// DISPLAY ITUNES LINKS ON DEFAULT MAIN PAGE
-	// document.querySelectorAll('.div-style a.img-link').forEach((el, i) => {
-	// 	el.href = newerArray[i];
-	// });
 	let array = data.podcasts;
 	for (let i = 0; i < array.length; i++) {
 		let iTunesId = array[i].itunes_id;
-		// console.log(iTunesId);
 		const testingData = await axios
 			.get('/podcast_data?id=' + iTunesId)
 			.then((response) => {
-				console.log(response);
 				newerArray.push(response.data.results[0].trackViewUrl);
-				// document.querySelectorAll('.rating-container button.button.red.info a')[i].href = 'www.google.com';
 			})
 			.catch((error) => {
 				newerArray.push('https://podcasts.apple.com');
 			});
 	}
-	console.log(newerArray);
-	// document.querySelectorAll('.rating-container button.button.red.info').forEach((el, i) => {
-	// 	el.href = newerArray[i];
-	// 	// getData(data);
-	// });
 	return newerArray;
 }
 
 let fullPodcastData;
 async function displayData(data) {
-	// for (let item of data) {
-	// 	item.push({ test: 1 });
-	// }
-
-	// for (let j = 0; j < birdArray.length; j++) {
-	// 	console.log(birdArray[j].podcasts[j].title);
-	// }
-	// console.log(ratingArray);
-	// let ratingSubArray = [];
 	const response = await fetch('/podcasts');
 	fullPodcastData = fullPodcastData || (await response.json());
-	// console.log(ratingData);
 	let ratingData = fullPodcastData;
-	console.log(data);
 	for (let pod of data.podcasts) {
-		console.log(pod.website);
-
 		for (let item of ratingData) {
-			// console.log(item.url);
-			// console.log(pod.title);
 			let itemTitle = item.title;
 			let podTitle = pod.title;
 
@@ -202,8 +168,6 @@ async function displayData(data) {
 				let itemTrimTitle = itemTitle.trim();
 				let itemPodTitle = podTitle.trim();
 				if (itemTrimTitle === itemPodTitle) {
-					console.log(itemTrimTitle);
-					console.log(itemPodTitle);
 					if (item.rating === undefined) {
 						pod.newRating = 'N/A';
 					} else {
@@ -219,11 +183,7 @@ async function displayData(data) {
 	let display = document.querySelector('.listen');
 	display.innerHTML = ``;
 	let array = data.podcasts;
-	console.log(array);
 	let resultsArray = [];
-	// console.log(newerArray.length);
-
-	// console.log(newerArray.length);
 	for (let i = 0; i < array.length; i++) {
 		resultsArray.push([
 			array[i].image,
@@ -237,25 +197,17 @@ async function displayData(data) {
 		]);
 	}
 	for (let item of resultsArray) {
-		console.log(item);
 		let displayImage = document.createElement('img');
-		// let toolTip = document.createElement('div');
 		displayImage.classList.add('display-image');
-		// toolTip.classList.add('toolTip');
 		let div = document.createElement('div');
 		div.classList.add('div-style');
 		displayImage.src = item[0];
-		// toolTip.src = item[3];
 		a = document.createElement('a');
 		b = document.createElement('a');
 		c = document.createElement('a');
-		// d = document.createElement('a');
 		b.href = item[2];
-
-		// console.log(ratingArray);
 		a.setAttribute('target', '_blank');
 		b.setAttribute('target', '_blank');
-		// d.setAttribute('target', '_blank');
 		a.classList = 'pod-infoLink';
 		c.classList = 'img-link';
 		c.setAttribute('id', `${item[4]}`);
@@ -268,15 +220,11 @@ async function displayData(data) {
 			.substring(0, 800)
 			.replace(/(<([^>]+)>)/gi, '')}</div>`;
 
-		// d.innerHTML = `<button class="button test"><a href=""target="_blank">Podcast Test</button></a>`;
-		// console.log(item[3]);
 		div.appendChild(c);
 		div.appendChild(a);
 		div.appendChild(b);
-		// div.appendChild(d);
 		display.classList.add('block');
 		display.appendChild(div);
-		// getData(data);
 	}
 }
 
@@ -289,14 +237,12 @@ let page = 1;
 rightArrow.addEventListener('click', (e) => {
 	newerArray = [];
 	let genreId = genreIdArray[0];
-	// console.log(genreId);
 
 	getTopPodcastsByGenre(genreId, (page += 1));
 	document.getElementById('left-arrow').style.visibility = 'visible';
 	setTimeout(function() {
 		document.body.scrollTop = document.documentElement.scrollTop = 0;
 	}, 500);
-	// console.log(page);
 });
 leftArrow.addEventListener('click', (e) => {
 	let genreId = genreIdArray[0];
@@ -305,5 +251,3 @@ leftArrow.addEventListener('click', (e) => {
 		document.body.scrollTop = document.documentElement.scrollTop = 0;
 	}, 500);
 });
-
-// Right after paste
