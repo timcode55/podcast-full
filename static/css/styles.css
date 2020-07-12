@@ -316,6 +316,8 @@ a {
 
 .rating-overlay {
 	/* z-index: 5; */
+	display: flex;
+	align-items: center;
 	background-color: #4b4848;
 	color: white;
 	font-weight: 800;
@@ -327,6 +329,8 @@ a {
 
 .number-ratings {
 	/* z-index: 5; */
+	display: flex;
+	align-items: center;
 	background-color: #4b4848;
 	color: white;
 	font-weight: 800;

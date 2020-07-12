@@ -260,7 +260,7 @@ async function displayData(data) {
 		c.classList = 'img-link';
 		c.setAttribute('id', `${item[4]}`);
 		a.innerHTML = `
-    <div class="rating-container"><button class="rating-overlay">${item[5]}</button><button class="number-ratings"># of ratings ${item[6]}</button><button class="button red info"><a href="${item[7]}"target="_blank">Podcast Info</button></a></div>`;
+    <div class="rating-container"><button class="rating-overlay button red">${item[5]}</button><button class="number-ratings button red"># of ratings ${item[6]}</button><button class="button red info"><a href="${item[7]}"target="_blank">Podcast Info</button></a></div>`;
 		b.innerHTML = `
           <button class="button red webLink">Website</button>`;
 		c.innerHTML = `
