@@ -178,7 +178,7 @@ async function main(list) {
 			ratings.each((i, element) => {
 				const rating = $(element).text().trim();
 				// console.log(rating);
-				object['rating'] = rating;
+				object['rating'] = parseFloat(rating);
 			});
 			genre.each((i, element) => {
 				const genre = $(element).text().trim();
@@ -220,17 +220,24 @@ async function main(list) {
 				} else {
 					console.log('item already exists, Ill update it.');
 					try {
-						podFromDb.updateOne(
+						console.log('223', object);
+						Rating.findOneAndUpdate(
 							// $set: { rating: object.rating },
-							{ title: 'I Survived' },
-							{ $set: { rating: 1.0 } }
-							// $set: { numberOfRatings: object.numberOfRatings }
-							// title: object.title,
-							// rating: object.rating,
-							// numberOfRatings: object.numberOfRatings,
-							// genre: object.genre,
-							// url: list[i] || ''
+
+							{ title: object.title },
+							{
+								$set: {
+									rating: object.rating,
+									numberOfRatings: object.numberOfRatings
+								}
+							},
+							{ new: true },
+							function(err, res) {
+								if (err) throw err;
+								console.log('1 document updated');
+							}
 						);
+						console.log('after findoneandupate', Rating);
 						console.log('in DB after update', podFromDb);
 					} catch (e) {
 						console.log(e);
