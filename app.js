@@ -8,14 +8,18 @@ const path = require('path');
 let mongodb = require('mongodb');
 const Rating = require('./db/Rating');
 const connectDB = require('./db/mongoose');
+const bodyParser = require('body-parser');
 
 // Load env vars
 dotenv.config({ path: './config.env' });
 
 let app = express();
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 app.use(express.static(path.join(__dirname, 'static')));
-const PORT = process.env.PORT || 4000;
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }));
+// const PORT = process.env.PORT || 7000;
+const PORT = 7000;
 
 connectDB();
 
@@ -147,10 +151,10 @@ const array = [
 	// 'https://podcasts.apple.com/us/podcast/the-dan-bongino-show/id965293227?uo=4'
 	// 'https://podcasts.apple.com/us/podcast/motive-for-murder/id1510365500?uo=4'
 ];
-
+let testArray = [];
 async function main(list) {
 	for (let i = 0; i < list.length; i++) {
-		// console.log(list[i]);
+		console.log(list[i]);
 
 		const html = await request.get(`${list[i]}`);
 		// console.log(html);
@@ -166,14 +170,9 @@ async function main(list) {
 		await sleep(200);
 		titles.each((i, element) => {
 			const title = $(element).text().trim();
-			// console.log(title);
 			object['title'] = title;
 		});
-		// description.each((i, element) => {
-		// 	const description = $(element).text().trim();
-		// 	console.log(description);
-		// 	object['description'] = description;
-		// });
+
 		ratings.each((i, element) => {
 			const rating = $(element).text().trim();
 			// console.log(rating);
@@ -184,8 +183,8 @@ async function main(list) {
 			// console.log(rating);
 			object['genre'] = genre;
 		});
-		numberOfRatings.each((i, element) => {
-			let numberOfRatings = $(element, i).text().split(' ')[0];
+		numberOfRatings.each((j, element) => {
+			let numberOfRatings = $(element, j).text().split(' ')[0];
 			for (let i = 0; i < numberOfRatings.length; i++) {
 				if (numberOfRatings[i] === 'K') {
 					numberOfRatings = parseFloat(numberOfRatings) * 1000;
@@ -196,29 +195,35 @@ async function main(list) {
 			console.log(numberOfRatings);
 			object['numberOfRatings'] = numberOfRatings;
 		});
-		console.log(list);
-		console.log(list[i]);
 		const podRating = new Rating({
 			title: object.title,
 			rating: object.rating,
 			numberOfRatings: object.numberOfRatings,
 			genre: object.genre,
-			// description: object.description,
 			url: list[i] || ''
 		});
 		const podFromDb = await Rating.findOne({ title: object.title });
-		console.log(podFromDb);
-		if (!podFromDb) {
-			console.log("item doesn't exist, I'll add it");
-			podRating.save();
-		} else {
-			console.log('item already exists');
+		console.log(podRating);
+		try {
+			if (!podFromDb) {
+				try {
+					testArray.push(podRating);
+					console.log("item doesn't exist, I'll add it");
+					podRating.save();
+				} catch (error) {
+					console.log('PROBLEM', error);
+				}
+			} else {
+				console.log('item already exists');
+			}
+		} catch (err) {
+			console.log(err);
 		}
-		// console.log(object);
 
 		const allPods = await Rating.find();
 		let result = JSON.stringify(allPods);
 		// console.log(allPods);
+
 		app.get('/api/podcasts', (req, res) => {
 			res.send(result);
 		});

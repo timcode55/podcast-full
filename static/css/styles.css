@@ -2,7 +2,15 @@
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+}
+
+body {
 	background-color: rgb(196, 194, 194);
+}
+
+a {
+	text-decoration: none;
+	color: white;
 }
 
 .container {
@@ -314,6 +322,7 @@
 	font-size: .4em;
 	width: 50px;
 	height: 30px;
+	margin-bottom: 5px;
 }
 
 .number-ratings {

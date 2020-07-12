@@ -10,6 +10,7 @@ function getCategories() {
 		credentials: 'same-origin'
 	}).then((response) => {
 		response.json().then((data) => {
+			console.log(data);
 			let genreSelector = document.getElementById('selection');
 			let genreSelector2 = document.getElementById('selection2');
 			let fullArray = [];
@@ -164,7 +165,7 @@ async function getItunesLink(data) {
 				newerArray.push('https://podcasts.apple.com');
 			});
 	}
-	console.log(newerArray.length);
+	console.log(newerArray);
 	// document.querySelectorAll('.rating-container button.button.red.info').forEach((el, i) => {
 	// 	el.href = newerArray[i];
 	// 	// getData(data);
@@ -189,14 +190,24 @@ async function displayData(data) {
 	let ratingData = fullPodcastData;
 	console.log(data);
 	for (let pod of data.podcasts) {
-		console.log(pod);
+		console.log(pod.website);
 
 		for (let item of ratingData) {
-			if (item.title === pod.title) {
-				console.log(item);
-				pod.newRating = item.rating;
-				pod.numberOfRatings = item.numberOfRatings;
-				pod.url = item.url;
+			// console.log(item.url);
+			// console.log(pod.title);
+			let itemTitle = item.title;
+			let podTitle = pod.title;
+
+			if (itemTitle && podTitle) {
+				let itemTrimTitle = itemTitle.trim();
+				let itemPodTitle = podTitle.trim();
+				if (itemTrimTitle === itemPodTitle) {
+					console.log(itemTrimTitle);
+					console.log(itemPodTitle);
+					pod.newRating = item.rating || 'N/A';
+					pod.numberOfRatings = item.numberOfRatings || 'N/A';
+					pod.url = item.url;
+				}
 			}
 		}
 	}
@@ -204,11 +215,11 @@ async function displayData(data) {
 	let display = document.querySelector('.listen');
 	display.innerHTML = ``;
 	let array = data.podcasts;
-	// console.log(array);
+	console.log(array);
 	let resultsArray = [];
-	console.log(newerArray.length);
+	// console.log(newerArray.length);
 
-	console.log(newerArray.length);
+	// console.log(newerArray.length);
 	for (let i = 0; i < array.length; i++) {
 		resultsArray.push([
 			array[i].image,
@@ -221,7 +232,7 @@ async function displayData(data) {
 			array[i].url
 		]);
 	}
-	for (let [ i, item ] of resultsArray.entries()) {
+	for (let item of resultsArray) {
 		console.log(item);
 		let displayImage = document.createElement('img');
 		// let toolTip = document.createElement('div');
