@@ -259,7 +259,7 @@ async function main(list) {
 		}
 	}
 }
-
+console.log('Done Scraping');
 // let getAllPodcasts = async (req, res) => {
 // 	try {
 // 		const podcastsAll = await Rating.find();
