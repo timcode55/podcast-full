@@ -10,7 +10,7 @@ function getCategories() {
 		credentials: 'same-origin'
 	}).then((response) => {
 		response.json().then((data) => {
-			scrapeAllCategories(data);
+			console.log(data);
 			let genreSelector = document.getElementById('selection');
 			let genreSelector2 = document.getElementById('selection2');
 			let fullArray = [];
@@ -30,6 +30,8 @@ function getCategories() {
 				}
 				return 0;
 			});
+			console.log(fullArray);
+			testing(fullArray);
 
 			// DIVIDE FULL ARRAY INTO SELECTION BOX 1
 			for (let i = 0; i < 82; i++) {
@@ -42,7 +44,6 @@ function getCategories() {
 				const option = new Option(item.name, item.name);
 				genreSelector.add(option, undefined);
 			});
-			console.log(fullArray);
 
 			// DIVIDE FULL ARRAY INTO SELECTION BOX 2
 
@@ -56,60 +57,32 @@ function getCategories() {
 
 getCategories();
 
-function scrapeAllCategories(data) {
-	// console.log(data.genres[0].id);
-	// console.log(data);
-	// for (let i = 0; i < data.genres.length; i++) {
-	// console.log(data.genres[i].id);
-	// setInterval(function() {
-	// 	for (let i = 0; i < data.genres.length; i++) {
-	// 		getTopPodcastsByGenre(data.genres[i].id, 1);
-	// 	}
-	// }, 120000);
-	function loopDone() {
-		console.log('The loop is done!');
-	}
-	for (let i = 1; i < 4; i++) {
-		setTimeout(() => {
-			// console.log(data.genres[i]);
-			getTopPodcastsByGenre(data.genres[i].id, 1);
-			if (i === 4) {
-				loopDone();
-			}
-		}, i * 90000); // multiple i by 1000
-	}
-}
-// }
-
-// scrapeAllCategories(data);
-
 // EVENT LISTENER FOR CHANGE IN SELECTION BOX CATEGORY
-let genreIdArray = [];
-function getGenre() {
-	let e = document.getElementById('selection');
+// let genreIdArray = [];
+// function getGenre() {
+// 	let e = document.getElementById('selection');
 
-	e.addEventListener('change', function() {
-		let selectedGenre = e.options[e.selectedIndex].text;
-		newerArray = [];
-		let displayTitle = document.querySelector('.title');
-		displayTitle.innerHTML = `TOP PODCASTS - ${selectedGenre.toUpperCase()}`;
-		// getGenreId(selectedGenre);
-	});
-}
-getGenre();
+// 	e.addEventListener('change', function() {
+// 		let selectedGenre = e.options[e.selectedIndex].text;
+// 		newerArray = [];
+// 		let displayTitle = document.querySelector('.title');
+// 		displayTitle.innerHTML = `TOP PODCASTS - ${selectedGenre.toUpperCase()}`;
+// 		getGenreId(selectedGenre);
+// 	});
+// }
+// getGenre();
 
-function getGenre2() {
-	let e2 = document.getElementById('selection2');
+// function getGenre2() {
+// 	let e2 = document.getElementById('selection2');
 
-	e2.addEventListener('change', function() {
-		let selectedGenre = e2.options[e2.selectedIndex].text;
-
-		newerArray = [];
-		let displayTitle = document.querySelector('.title');
-		displayTitle.innerHTML = `TOP PODCASTS - ${selectedGenre.toUpperCase()}`;
-		// getGenreId(selectedGenre);
-	});
-}
+// 	e2.addEventListener('change', function() {
+// 		let selectedGenre = e2.options[e2.selectedIndex].text;
+// 		newerArray = [];
+// 		let displayTitle = document.querySelector('.title');
+// 		displayTitle.innerHTML = `TOP PODCASTS - ${selectedGenre.toUpperCase()}`;
+// 		getGenreId(selectedGenre);
+// 	});
+// }
 // getGenre2();
 
 // GET ALL GENRE CATEGORIES OF PODCASTS
@@ -124,15 +97,18 @@ function getGenre2() {
 // 		credentials: 'same-origin'
 // 	}).then((response) => {
 // 		response.json().then((data) => {
+// 			console.log('data in getGenreId', data);
 // 			let genreArray = data.genres;
-// 			for (let i = 0; i < genreArray.length; i++) {
-// 				if (genreArray[i].name === selectedGenre) {
-// 					let genreId = genreArray[i].id;
-// 					console.log(genreId);
-// 					genreIdArray.unshift(genreId);
-// 					console.log(genreId);
+// 			for (let i = 0; i < 4; i++) {
+// 				let genreId = genreArray[i].id;
+// 				genreIdArray.unshift(genreId);
+// 				setTimeout(() => {
+// 					// console.log(data.genres[i]);
 // 					getTopPodcastsByGenre(genreId, (page = 1));
-// 				}
+// 					if (i === 4) {
+// 						loopDone();
+// 					}
+// 				}, i * 20000); // multiple i by 1000
 // 			}
 // 		});
 // 	});
@@ -140,6 +116,20 @@ function getGenre2() {
 // getGenreId();
 
 // GET ALL TOP PODCASTS FOR SPECIFIC GENRE
+function testing(array) {
+	console.log('120', array);
+	for (let i = 0; i < 4; i++) {
+		let genreId = array[i].id;
+		// array.unshift(genreId);
+		setTimeout(() => {
+			// console.log(data.genres[i]);
+			getTopPodcastsByGenre(genreId, (page = 1));
+			if (i === 4) {
+				loopDone();
+			}
+		}, i * 90000); // multiple i by 1000
+	}
+}
 
 function getTopPodcastsByGenre(genreId, page) {
 	if (page === 1) {
@@ -161,13 +151,14 @@ function getTopPodcastsByGenre(genreId, page) {
 		}
 	).then((response) => {
 		response.json().then(async (data) => {
-			console.log(data);
 			displayData(data);
 
 			// SCRAPE DATA AND ADD TO DATABASE
+			console.log('data going into scraping', data);
 			const list = await getItunesLink(data);
 			axios.post('/podcasts', { urls: list }).then(function(response) {
-				// console.log(response);
+				console.log(response);
+				response.config.data.urls = [];
 			});
 		});
 	});
@@ -313,28 +304,28 @@ async function displayData(data) {
 
 // ARROW FOR MORE RESULTS
 
-// let rightArrow = document.getElementById('right-arrow');
-// let leftArrow = document.getElementById('left-arrow');
-// let page = 1;
+let rightArrow = document.getElementById('right-arrow');
+let leftArrow = document.getElementById('left-arrow');
+let page = 1;
 
-// rightArrow.addEventListener('click', (e) => {
-// 	newerArray = [];
-// 	let genreId = genreIdArray[0];
-// 	// console.log(genreId);
+rightArrow.addEventListener('click', (e) => {
+	newerArray = [];
+	let genreId = genreIdArray[0];
+	// console.log(genreId);
 
-// 	getTopPodcastsByGenre(genreId, (page += 1));
-// 	document.getElementById('left-arrow').style.visibility = 'visible';
-// 	setTimeout(function() {
-// 		document.body.scrollTop = document.documentElement.scrollTop = 0;
-// 	}, 500);
-// 	// console.log(page);
-// });
-// leftArrow.addEventListener('click', (e) => {
-// 	let genreId = genreIdArray[0];
-// 	getTopPodcastsByGenre(genreId, (page -= 1));
-// 	setTimeout(function() {
-// 		document.body.scrollTop = document.documentElement.scrollTop = 0;
-// 	}, 500);
-// });
+	getTopPodcastsByGenre(genreId, (page += 1));
+	document.getElementById('left-arrow').style.visibility = 'visible';
+	setTimeout(function() {
+		document.body.scrollTop = document.documentElement.scrollTop = 0;
+	}, 500);
+	// console.log(page);
+});
+leftArrow.addEventListener('click', (e) => {
+	let genreId = genreIdArray[0];
+	getTopPodcastsByGenre(genreId, (page -= 1));
+	setTimeout(function() {
+		document.body.scrollTop = document.documentElement.scrollTop = 0;
+	}, 500);
+});
 
 // Right after paste

@@ -154,7 +154,7 @@ const array = [
 let testArray = [];
 async function main(list) {
 	for (let i = 0; i < list.length; i++) {
-		console.log(list[i]);
+		console.log('157', list[i]);
 		try {
 			const html = await request.get(`${list[i]}`);
 
@@ -169,7 +169,7 @@ async function main(list) {
 			// const description = $('#ember381 > p');
 			// const descriptions = $('[name="ember-cli-head-start"]');
 			// console.log(descriptions);
-			await sleep(200);
+			// await sleep(200);
 			titles.each((i, element) => {
 				const title = $(element).text().trim();
 				object['title'] = title;
@@ -237,8 +237,8 @@ async function main(list) {
 								console.log('1 document updated');
 							}
 						);
-						console.log('after findoneandupate', Rating);
-						console.log('in DB after update', podFromDb);
+						console.log('after findoneandupdate', Rating);
+						// console.log('in DB after update', podFromDb);
 					} catch (e) {
 						console.log(e);
 					}
@@ -281,9 +281,9 @@ console.log('Done Scraping');
 
 // console.log(getAllPodcasts);
 
-async function sleep(milliseconds) {
-	return new Promise((resolve) => setTimeout(resolve, milliseconds));
-}
+// async function sleep(milliseconds) {
+// 	return new Promise((resolve) => setTimeout(resolve, milliseconds));
+// }
 
 // main();
 
@@ -331,7 +331,8 @@ app.get('/podcasts/:id', async (req, res) => {
 });
 
 app.post('/podcasts', (req, res) => {
-	console.log(req.body);
+	console.log('334', req.body);
+
 	main(req.body.urls);
 	res.send({ status: 'ok' });
 });

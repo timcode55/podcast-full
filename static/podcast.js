@@ -239,6 +239,7 @@ async function displayData(data) {
 	}
 	for (let item of resultsArray) {
 		// console.log(item);
+		document.addEventListener('touchstart', function() {}, true);
 		let displayImage = document.createElement('img');
 		// let toolTip = document.createElement('div');
 		displayImage.classList.add('display-image');
