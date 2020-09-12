@@ -153,8 +153,10 @@ const array = [
 ];
 let testArray = [];
 async function main(list) {
+	console.log('156', list);
 	for (let i = 0; i < list.length; i++) {
 		console.log('157', list[i]);
+		console.log('158', list.length);
 		try {
 			const html = await request.get(`${list[i]}`);
 
@@ -258,6 +260,8 @@ async function main(list) {
 			continue;
 		}
 	}
+	urls = [];
+	list = [];
 }
 console.log('Done Scraping');
 // let getAllPodcasts = async (req, res) => {
@@ -331,10 +335,11 @@ app.get('/podcasts/:id', async (req, res) => {
 });
 
 app.post('/podcasts', (req, res) => {
-	console.log('334', req.body);
-
+	console.log('334', req.body.urls);
+	debugger;
 	main(req.body.urls);
 	res.send({ status: 'ok' });
+	req.body.urls = [];
 });
 
 app.listen(PORT, () => {

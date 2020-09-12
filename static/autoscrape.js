@@ -120,13 +120,15 @@ function testing(array) {
 	console.log('120', array);
 	for (let i = 0; i < 4; i++) {
 		let genreId = array[i].id;
-		// array.unshift(genreId);
+
+		if (i === 4) {
+			loopDone();
+		}
 		setTimeout(() => {
-			// console.log(data.genres[i]);
+			console.log(genreId);
 			getTopPodcastsByGenre(genreId, (page = 1));
-			if (i === 4) {
-				loopDone();
-			}
+			array.shift(genreId);
+			console.log('shifted array', array);
 		}, i * 90000); // multiple i by 1000
 	}
 }
