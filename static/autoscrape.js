@@ -116,21 +116,22 @@ getCategories();
 // getGenreId();
 
 // GET ALL TOP PODCASTS FOR SPECIFIC GENRE
-function testing(array) {
+function testing(array, i = 20) {
 	console.log('120', array);
-	for (let i = 0; i < 4; i++) {
-		let genreId = array[i].id;
+	//for (let i = 21; i < 22; i++) {
+	let genreId = array[i].id;
+	console.log(genreId, i);
 
-		if (i === 4) {
-			loopDone();
-		}
-		setTimeout(() => {
-			console.log(genreId);
-			getTopPodcastsByGenre(genreId, (page = 1));
-			array.shift(genreId);
-			console.log('shifted array', array);
-		}, i * 90000); // multiple i by 1000
-	}
+	getTopPodcastsByGenre(genreId, (page = 1));
+	array.shift(genreId);
+	console.log('shifted array', array);
+	// if (i === 4) {
+	// 	loopDone();
+	// }
+	setTimeout(() => {
+		if (array.length > i) testing(array, i);
+	}, 90000); // multiple i by 1000
+	//}
 }
 
 function getTopPodcastsByGenre(genreId, page) {
@@ -157,7 +158,7 @@ function getTopPodcastsByGenre(genreId, page) {
 
 			// SCRAPE DATA AND ADD TO DATABASE
 			console.log('data going into scraping', data);
-			const list = await getItunesLink(data);
+			let list = await getItunesLink(data);
 			axios.post('/podcasts', { urls: list }).then(function(response) {
 				console.log(response);
 				response.config.data.urls = [];

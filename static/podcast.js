@@ -138,7 +138,7 @@ function getTopPodcastsByGenre(genreId, page) {
 			const list = await getItunesLink(data);
 			axios.post('/podcasts', { urls: list }).then(function(response) {
 				console.log(response);
-				console.log(urls);
+				console.log('line 141 podcast.js', urls);
 			});
 		});
 	});

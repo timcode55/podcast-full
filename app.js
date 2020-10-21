@@ -153,6 +153,10 @@ const array = [
 ];
 let testArray = [];
 async function main(list) {
+	if (list.length > 20) {
+		list = list.slice(list.length - 20);
+	}
+
 	console.log('156', list);
 	for (let i = 0; i < list.length; i++) {
 		console.log('157', list[i]);
@@ -236,7 +240,6 @@ async function main(list) {
 							{ new: true },
 							function(err, res) {
 								if (err) throw err;
-								console.log('1 document updated');
 							}
 						);
 						console.log('after findoneandupdate', Rating);
@@ -260,6 +263,7 @@ async function main(list) {
 			continue;
 		}
 	}
+	console.log('FINISHED SCRAPING');
 	urls = [];
 	list = [];
 }
