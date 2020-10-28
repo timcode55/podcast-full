@@ -4,11 +4,13 @@
 	"description": "",
 	"main": "app.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"ng-high-memory": "node --max_old_space_size=8000"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
+	"build-serve": "node --max_old_space_size=8048",
 	"dependencies": {
 		"body-parser": "^1.19.0",
 		"cheerio": "^1.0.0-rc.3",
@@ -16,7 +18,7 @@
 		"express": "^4.17.1",
 		"mongodb": "^3.5.8",
 		"mongoose": "^5.9.18",
-		"node-fetch": "^2.6.0",
+		"node-fetch": "^2.6.1",
 		"path": "^0.12.7",
 		"request": "^2.88.2",
 		"request-promise": "^4.2.5",

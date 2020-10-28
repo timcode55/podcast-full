@@ -10,7 +10,7 @@ function getCategories() {
 		credentials: 'same-origin'
 	}).then((response) => {
 		response.json().then((data) => {
-			console.log(data);
+			// console.log(data);
 			let genreSelector = document.getElementById('selection');
 			let genreSelector2 = document.getElementById('selection2');
 			let fullArray = [];
@@ -30,7 +30,7 @@ function getCategories() {
 				}
 				return 0;
 			});
-			console.log(fullArray);
+			// console.log(fullArray);
 			testing(fullArray);
 
 			// DIVIDE FULL ARRAY INTO SELECTION BOX 1
@@ -116,25 +116,29 @@ getCategories();
 // getGenreId();
 
 // GET ALL TOP PODCASTS FOR SPECIFIC GENRE
-function testing(array, i = 20) {
-	console.log('120', array);
+
+function testing(array, i = 79) {
+	// console.log('120', array[i].name);
 	//for (let i = 21; i < 22; i++) {
 	let genreId = array[i].id;
-	console.log(genreId, i);
+	console.log(genreId, i, array[i].name, 'size', array.length);
+	let titleDisplay = document.querySelector('.title');
+	titleDisplay.textContent = `CATEGORY - ${array[i].name.toUpperCase()}`;
 
-	getTopPodcastsByGenre(genreId, (page = 1));
-	array.shift(genreId);
-	console.log('shifted array', array);
+	getTopPodcastsByGenre(genreId, (page = 3));
+	// array.shift(genreId);
+	// console.log('shifted array', array);
 	// if (i === 4) {
 	// 	loopDone();
 	// }
 	setTimeout(() => {
-		if (array.length > i) testing(array, i);
-	}, 90000); // multiple i by 1000
+		if (array.length > i) testing(array, i + 1);
+	}, 110000); // multiple i by 1000
 	//}
 }
 
 function getTopPodcastsByGenre(genreId, page) {
+	console.log(page);
 	if (page === 1) {
 		document.getElementById('left-arrow').style.visibility = 'hidden';
 	}
@@ -157,10 +161,10 @@ function getTopPodcastsByGenre(genreId, page) {
 			displayData(data);
 
 			// SCRAPE DATA AND ADD TO DATABASE
-			console.log('data going into scraping', data);
+			// console.log('data going into scraping', data.name);
 			let list = await getItunesLink(data);
 			axios.post('/podcasts', { urls: list }).then(function(response) {
-				console.log(response);
+				// console.log(response);
 				response.config.data.urls = [];
 			});
 		});
@@ -244,7 +248,7 @@ async function displayData(data) {
 	let display = document.querySelector('.listen');
 	display.innerHTML = ``;
 	let array = data.podcasts;
-	console.log(array);
+	// console.log(array);
 	let resultsArray = [];
 	// console.log(newerArray.length);
 

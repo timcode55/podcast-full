@@ -19,7 +19,7 @@ app.use(express.static(path.join(__dirname, 'static')));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }));
 // const PORT = process.env.PORT || 7000;
-const PORT = 7000;
+const PORT = 5000;
 
 connectDB();
 
@@ -215,18 +215,19 @@ async function main(list) {
 			// console.log(podRating);
 			try {
 				if (!podFromDb) {
-					console.log('not in DB', podFromDb);
 					try {
 						testArray.push(podRating);
 						console.log("item doesn't exist, I'll add it");
+
 						podRating.save();
+						console.log('TEST, NEW ITEM', object);
 					} catch (error) {
 						console.log('PROBLEM', error);
 					}
 				} else {
 					console.log('item already exists, Ill update it.');
 					try {
-						console.log('223', object);
+						// console.log('223', object);
 						Rating.findOneAndUpdate(
 							// $set: { rating: object.rating },
 
@@ -240,16 +241,17 @@ async function main(list) {
 							{ new: true },
 							function(err, res) {
 								if (err) throw err;
+								console.log('1 document updated');
 							}
 						);
-						console.log('after findoneandupdate', Rating);
-						// console.log('in DB after update', podFromDb);
+
+						console.log('in DB after update', object);
 					} catch (e) {
-						console.log(e);
+						console.log('PROBLEM LATER', e);
 					}
 				}
 			} catch (err) {
-				console.log(err);
+				console.log('PROBLEM MORE LATER', err);
 			}
 			const allPods = await Rating.find();
 			let result = JSON.stringify(allPods);
@@ -259,15 +261,12 @@ async function main(list) {
 				res.send(result);
 			});
 		} catch (e) {
-			console.log(e);
+			console.log('AND EVEN MORE LATER', e);
 			continue;
 		}
 	}
-	console.log('FINISHED SCRAPING');
-	urls = [];
-	list = [];
+	console.log('ALL DONE SCANNING');
 }
-console.log('Done Scraping');
 // let getAllPodcasts = async (req, res) => {
 // 	try {
 // 		const podcastsAll = await Rating.find();
