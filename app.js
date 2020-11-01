@@ -211,7 +211,7 @@ async function main(list) {
 				url: list[i] || ''
 			});
 
-			const podFromDb = await Rating.findOne({ title: object.title });
+			const podFromDb = await Rating.findOne({ title: object.title }).lean();
 			// console.log(podRating);
 			try {
 				if (!podFromDb) {
@@ -253,13 +253,13 @@ async function main(list) {
 			} catch (err) {
 				console.log('PROBLEM MORE LATER', err);
 			}
-			const allPods = await Rating.find();
-			let result = JSON.stringify(allPods);
-			// console.log(allPods);
+			// const allPods = await Rating.find();
+			// let result = JSON.stringify(allPods);
+			// // console.log(allPods);
 
-			app.get('/api/podcasts', (req, res) => {
-				res.send(result);
-			});
+			// app.get('/api/podcasts', (req, res) => {
+			// 	res.send(result);
+			// });
 		} catch (e) {
 			console.log('AND EVEN MORE LATER', e);
 			continue;

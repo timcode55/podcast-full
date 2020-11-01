@@ -117,7 +117,7 @@ getCategories();
 
 // GET ALL TOP PODCASTS FOR SPECIFIC GENRE
 
-function testing(array, i = 79) {
+function testing(array, i = 76) {
 	// console.log('120', array[i].name);
 	//for (let i = 21; i < 22; i++) {
 	let genreId = array[i].id;
@@ -125,7 +125,7 @@ function testing(array, i = 79) {
 	let titleDisplay = document.querySelector('.title');
 	titleDisplay.textContent = `CATEGORY - ${array[i].name.toUpperCase()}`;
 
-	getTopPodcastsByGenre(genreId, (page = 3));
+	getTopPodcastsByGenre(genreId, (page = 1));
 	// array.shift(genreId);
 	// console.log('shifted array', array);
 	// if (i === 4) {
@@ -133,7 +133,7 @@ function testing(array, i = 79) {
 	// }
 	setTimeout(() => {
 		if (array.length > i) testing(array, i + 1);
-	}, 110000); // multiple i by 1000
+	}, 80000); // multiple i by 1000
 	//}
 }
 
