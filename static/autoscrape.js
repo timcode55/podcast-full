@@ -117,7 +117,7 @@ getCategories();
 
 // GET ALL TOP PODCASTS FOR SPECIFIC GENRE
 
-function testing(array, i = 76) {
+function testing(array, i = 111) {
 	// console.log('120', array[i].name);
 	//for (let i = 21; i < 22; i++) {
 	let genreId = array[i].id;
@@ -125,7 +125,7 @@ function testing(array, i = 76) {
 	let titleDisplay = document.querySelector('.title');
 	titleDisplay.textContent = `CATEGORY - ${array[i].name.toUpperCase()}`;
 
-	getTopPodcastsByGenre(genreId, (page = 1));
+	getTopPodcastsByGenre(genreId, (page = 2));
 	// array.shift(genreId);
 	// console.log('shifted array', array);
 	// if (i === 4) {
@@ -133,7 +133,7 @@ function testing(array, i = 76) {
 	// }
 	setTimeout(() => {
 		if (array.length > i) testing(array, i + 1);
-	}, 80000); // multiple i by 1000
+	}, 40000); // multiple i by 1000
 	//}
 }
 
@@ -158,6 +158,7 @@ function getTopPodcastsByGenre(genreId, page) {
 		}
 	).then((response) => {
 		response.json().then(async (data) => {
+			// console.log(data);
 			displayData(data);
 
 			// SCRAPE DATA AND ADD TO DATABASE
@@ -204,6 +205,7 @@ async function getItunesLink(data) {
 
 let fullPodcastData;
 async function displayData(data) {
+	console.log('208 data', data);
 	// for (let item of data) {
 	// 	item.push({ test: 1 });
 	// }
@@ -215,7 +217,7 @@ async function displayData(data) {
 	// let ratingSubArray = [];
 	const response = await fetch('/podcasts');
 	fullPodcastData = fullPodcastData || (await response.json());
-	// console.log(ratingData);
+	// console.log('218 fullpodcastdata', fullPodcastData);
 	let ratingData = fullPodcastData;
 	console.log(data);
 	for (let pod of data.podcasts) {
@@ -248,7 +250,7 @@ async function displayData(data) {
 	let display = document.querySelector('.listen');
 	display.innerHTML = ``;
 	let array = data.podcasts;
-	// console.log(array);
+	console.log('253 array', array);
 	let resultsArray = [];
 	// console.log(newerArray.length);
 
@@ -266,7 +268,7 @@ async function displayData(data) {
 		]);
 	}
 	for (let item of resultsArray) {
-		// console.log(item);
+		console.log('271 item', item);
 		let displayImage = document.createElement('img');
 		// let toolTip = document.createElement('div');
 		displayImage.classList.add('display-image');
@@ -281,7 +283,7 @@ async function displayData(data) {
 		// d = document.createElement('a');
 		b.href = item[2];
 
-		// console.log(ratingArray);
+		console.log('resultsarray 286', resultsArray);
 		a.setAttribute('target', '_blank');
 		b.setAttribute('target', '_blank');
 		// d.setAttribute('target', '_blank');
