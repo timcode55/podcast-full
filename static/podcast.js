@@ -130,8 +130,8 @@ function getTopPodcastsByGenre(genreId, page) {
 		}
 	).then((response) => {
 		response.json().then(async (data) => {
-			console.log('133 data', data);
-			console.log('newRating', data.podcasts[0].newRating);
+			// console.log('133 data', data);
+			// console.log('newRating', data.podcasts[0].newRating);
 			displayData(data);
 
 			// SCRAPE DATA AND ADD TO DATABASE
