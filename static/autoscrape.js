@@ -117,15 +117,15 @@ getCategories();
 
 // GET ALL TOP PODCASTS FOR SPECIFIC GENRE
 
-function testing(array, i = 112) {
+function testing(array, i = 4) {
 	// console.log('120', array[i].name);
 	//for (let i = 21; i < 22; i++) {
 	let genreId = array[i].id;
-	console.log(genreId, i, array[i].name, 'size', array.length);
+	console.log(i, array[i].name);
 	let titleDisplay = document.querySelector('.title');
 	titleDisplay.textContent = `CATEGORY - ${array[i].name.toUpperCase()}`;
 
-	getTopPodcastsByGenre(genreId, (page = 1));
+	getTopPodcastsByGenre(genreId, (page = 2));
 	// array.shift(genreId);
 	// console.log('shifted array', array);
 	// if (i === 4) {
@@ -138,7 +138,7 @@ function testing(array, i = 112) {
 }
 
 function getTopPodcastsByGenre(genreId, page) {
-	console.log(page);
+	// console.log(page);
 	if (page === 1) {
 		document.getElementById('left-arrow').style.visibility = 'hidden';
 	}
@@ -205,7 +205,9 @@ async function getItunesLink(data) {
 
 let fullPodcastData;
 async function displayData(data) {
-	console.log('208 data', data);
+	let display = document.querySelector('.listen');
+	display.innerHTML = `....Loading`;
+	// console.log('208 data', data);
 	// for (let item of data) {
 	// 	item.push({ test: 1 });
 	// }
@@ -219,7 +221,7 @@ async function displayData(data) {
 	fullPodcastData = fullPodcastData || (await response.json());
 	// console.log('218 fullpodcastdata', fullPodcastData);
 	let ratingData = fullPodcastData;
-	console.log(data);
+	// console.log(data);
 	for (let pod of data.podcasts) {
 		// console.log(pod.website);
 
@@ -247,10 +249,9 @@ async function displayData(data) {
 		}
 	}
 
-	let display = document.querySelector('.listen');
 	display.innerHTML = ``;
 	let array = data.podcasts;
-	console.log('253 array', array);
+	// console.log('253 array', array);
 	let resultsArray = [];
 	// console.log(newerArray.length);
 
@@ -268,7 +269,7 @@ async function displayData(data) {
 		]);
 	}
 	for (let item of resultsArray) {
-		console.log('271 item', item);
+		// console.log('271 item', item);
 		let displayImage = document.createElement('img');
 		// let toolTip = document.createElement('div');
 		displayImage.classList.add('display-image');
@@ -283,7 +284,9 @@ async function displayData(data) {
 		// d = document.createElement('a');
 		b.href = item[2];
 
-		console.log('resultsarray 286', resultsArray);
+		document.getElementById('right-arrow').style.visibility = 'visible';
+
+		// console.log('resultsarray 286', resultsArray);
 		a.setAttribute('target', '_blank');
 		b.setAttribute('target', '_blank');
 		// d.setAttribute('target', '_blank');
@@ -314,6 +317,7 @@ async function displayData(data) {
 // ARROW FOR MORE RESULTS
 
 let rightArrow = document.getElementById('right-arrow');
+document.getElementById('right-arrow').style.visibility = 'hidden';
 let leftArrow = document.getElementById('left-arrow');
 let page = 1;
 
