@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Rating = mongoose.model(
 	'Rating',
 	mongoose.Schema({
-		title: String,
+		title: { type: String, index: true },
 		rating: Number,
 		numberOfRatings: Number,
 		genre: String,

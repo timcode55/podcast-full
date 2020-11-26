@@ -7,6 +7,8 @@ const connectDB = async () => {
 		useCreateIndex: true,
 		useFindAndModify: false
 	});
+
+	console.log('DB connection was successful!');
 };
 
 module.exports = connectDB;

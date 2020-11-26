@@ -130,7 +130,15 @@ function getTopPodcastsByGenre(genreId, page) {
 		}
 	).then((response) => {
 		response.json().then(async (data) => {
+			console.log('133 data', data);
+			console.log('newRating', data.podcasts[0].newRating);
 			displayData(data);
+
+			// SCRAPE DATA AND ADD TO DATABASE
+			// const list = await getItunesLink(data);
+			// axios.post('/podcasts', { urls: list }).then(function(response) {
+			// 	// console.log(response);
+			// });
 		});
 	});
 }
@@ -149,6 +157,7 @@ async function getItunesLink(data) {
 			})
 			.catch((error) => {
 				newerArray.push('https://podcasts.apple.com');
+				console.log(error);
 			});
 	}
 	return newerArray;
@@ -198,31 +207,54 @@ async function displayData(data) {
 	}
 	for (let item of resultsArray) {
 		let displayImage = document.createElement('img');
+		// let toolTip = document.createElement('div');
 		displayImage.classList.add('display-image');
+		// toolTip.classList.add('toolTip');
 		let div = document.createElement('div');
 		div.classList.add('div-style');
 		displayImage.src = item[0];
+		// toolTip.src = item[3];
 		a = document.createElement('a');
 		b = document.createElement('a');
 		c = document.createElement('a');
+		d = document.createElement('a');
 		b.href = item[2];
-		a.setAttribute('target', '_blank');
-		b.setAttribute('target', '_blank');
-		a.classList = 'pod-infoLink';
-		c.classList = 'img-link';
-		c.setAttribute('id', `${item[4]}`);
-		a.innerHTML = `
-    <div class="rating-container"><button class="rating-overlay button red">${item[5]}</button><button class="number-ratings button red"># of ratings ${item[6]}</button><button class="button red info"><a href="${item[7]}"target="_blank">Podcast Info</button></a></div>`;
-		b.innerHTML = `
-          <button class="button red webLink">Website</button>`;
-		c.innerHTML = `
-          <a href="${item[1]}" target="_blank"><img class="img display-image" src=${item[0]}></a></img><br><div class ="toolTip">${item[3]
-			.substring(0, 800)
-			.replace(/(<([^>]+)>)/gi, '')}</div>`;
-
-		div.appendChild(c);
-		div.appendChild(a);
-		div.appendChild(b);
+		// c.innerHTML = `
+		//     <a href="${item[1]}" target="_blank"><img class="img display-image" src=${item[0]}></a></img><br><div class ="toolTip">${item[3]
+		// .substring(0, 800)
+		// .replace(/(<([^>]+)>)/gi, '')}</div>`;
+		d.innerHTML = `<div class="podcontainer">
+    <div class="image">
+      <a href="${item[1]}" target="_blank"><img class="podimage" src="${item[0]}" alt="pod1"></a>
+    </div>
+    <div class="podtitle">
+      <h1>${item[4].substring(0, 52)}</h1>
+    </div>
+    <div class="desc">
+      <p class="ptext">${item[3].substring(0, 200).replace(/(<([^>]+)>)/gi, '')}...</p>
+    </div>
+    <div class="podButtons">
+      <div class="webButton">
+      <a href=${item[2]} target="_blank"><button>Website</button></a>
+      </div>
+      <div class="webButton">
+      <a href=${item[7]} target="_blank"><button>iTunes Link</button></a>
+      </div>
+    </div>
+    <div class="contratings">
+        <div class="footeritem">
+          <img class="ratingimage" src="images/Hashtag-26-52px/icons8-hashtag-52.png" alt="ratingimage">
+          <p class="ratingtext"># of Ratings</p>
+          <p class="ratingtext">${item[6]}</p>
+        </div>
+        <div class="footeritem">
+          <img class="ratingimage" src="images/Star-24-48px/icons8-star-48.png" alt="ratingimage">
+          <p class="ratingtext">iTunes Rating</p>
+          <p class="ratingtext">${item[5]}</p>
+        </div>
+        </div>
+      </div>`;
+		div.appendChild(d);
 		display.classList.add('block');
 		display.appendChild(div);
 	}
@@ -237,7 +269,6 @@ let page = 1;
 rightArrow.addEventListener('click', (e) => {
 	newerArray = [];
 	let genreId = genreIdArray[0];
-
 	getTopPodcastsByGenre(genreId, (page += 1));
 	document.getElementById('left-arrow').style.visibility = 'visible';
 	setTimeout(function() {
