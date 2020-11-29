@@ -18,7 +18,6 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.static(path.join(__dirname, 'static')));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }));
-// const PORT = process.env.PORT || 7000;
 const PORT = 7000;
 
 connectDB();
@@ -39,10 +38,6 @@ app.use((req, res, next) => {
 app.get('/podcast_data', (req, res) => {
 	url = `https://itunes.apple.com/lookup?id=${req.query.id}`;
 	request({ url }, (error, response, body) => {
-		// if (error || response.statusCode !== 200) {
-		// 	return res.status(500).json({ type: 'error', message: err.message });
-		// }
-
 		res.json(JSON.parse(body));
 	});
 });

@@ -111,9 +111,6 @@ getGenreId();
 // GET ALL TOP PODCASTS FOR SPECIFIC GENRE
 
 function getTopPodcastsByGenre(genreId, page) {
-	if (page === 1) {
-		document.getElementById('left-arrow').style.visibility = 'hidden';
-	}
 	fetch(
 		'https://listen-api.listennotes.com/api/v2/best_podcasts?genre_id=' +
 			genreId +
@@ -130,15 +127,11 @@ function getTopPodcastsByGenre(genreId, page) {
 		}
 	).then((response) => {
 		response.json().then(async (data) => {
-			// console.log('133 data', data);
-			// console.log('newRating', data.podcasts[0].newRating);
+			display.innerHTML = ``;
+			loader.classList.remove('hidden');
+			document.getElementById('right-arrow').style.visibility = 'hidden';
+			document.getElementById('left-arrow').style.visibility = 'hidden';
 			displayData(data);
-
-			// SCRAPE DATA AND ADD TO DATABASE
-			// const list = await getItunesLink(data);
-			// axios.post('/podcasts', { urls: list }).then(function(response) {
-			// 	// console.log(response);
-			// });
 		});
 	});
 }
@@ -163,6 +156,9 @@ async function getItunesLink(data) {
 	return newerArray;
 }
 
+let display = document.querySelector('.listen');
+document.getElementById('right-arrow').style.visibility = 'hidden';
+document.getElementById('left-arrow').style.visibility = 'hidden';
 let fullPodcastData;
 async function displayData(data) {
 	const response = await fetch('/podcasts');
@@ -188,8 +184,6 @@ async function displayData(data) {
 			}
 		}
 	}
-
-	let display = document.querySelector('.listen');
 	display.innerHTML = ``;
 	let array = data.podcasts;
 	let resultsArray = [];
@@ -207,13 +201,10 @@ async function displayData(data) {
 	}
 	for (let item of resultsArray) {
 		let displayImage = document.createElement('img');
-		// let toolTip = document.createElement('div');
 		displayImage.classList.add('display-image');
-		// toolTip.classList.add('toolTip');
 		let div = document.createElement('div');
 		div.classList.add('div-style');
 		displayImage.src = item[0];
-		// toolTip.src = item[3];
 		a = document.createElement('a');
 		b = document.createElement('a');
 		c = document.createElement('a');
@@ -257,16 +248,23 @@ async function displayData(data) {
 		div.appendChild(d);
 		display.classList.add('block');
 		display.appendChild(div);
+		document.getElementById('right-arrow').style.visibility = 'visible';
+		if (page > 1) {
+			document.getElementById('left-arrow').style.visibility = 'visible';
+		}
+		let loader = document.getElementById('preloader');
+		loader.classList.add('hidden');
 	}
 }
 
 // ARROW FOR MORE RESULTS
-
+let loader = document.getElementById('preloader');
 let rightArrow = document.getElementById('right-arrow');
 let leftArrow = document.getElementById('left-arrow');
 let page = 1;
 
 rightArrow.addEventListener('click', (e) => {
+	loader.classList.remove('hidden');
 	newerArray = [];
 	let genreId = genreIdArray[0];
 	getTopPodcastsByGenre(genreId, (page += 1));
