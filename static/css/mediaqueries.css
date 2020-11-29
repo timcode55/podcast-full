@@ -18,6 +18,18 @@
 		height: 35px;
 	}
 
+	.podButtons {
+		display: flex;
+		flex-direction: column;
+	}
+	.webButton {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-top: 5px;
+		margin-bottom: -5px;
+	}
+
 	.container {
 		display: flex;
 		flex-wrap: wrap;
@@ -35,6 +47,17 @@
 }
 
 @media only screen and (max-width: 600px) {
+	.podButtons {
+		display: flex;
+		flex-direction: column;
+	}
+	.webButton {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-top: 5px;
+		margin-bottom: -5px;
+	}
 }
 
 @media only screen and (max-width: 375px) {
@@ -63,6 +86,17 @@
 
 	.container {
 		margin-top: -10px;
+	}
+	.podButtons {
+		display: flex;
+		flex-direction: column;
+	}
+	.webButton {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-top: 5px;
+		margin-bottom: -5px;
 	}
 
 	.rating-overlay {
