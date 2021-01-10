@@ -9,6 +9,8 @@ let mongodb = require('mongodb');
 const Rating = require('./db/Rating');
 const connectDB = require('./db/mongoose');
 const bodyParser = require('body-parser');
+const fs = require('fs');
+const fetch = require('node-fetch');
 
 // Load env vars
 dotenv.config({ path: './config.env' });
@@ -38,54 +40,24 @@ app.get('/podcast_data', (req, res) => {
 	});
 });
 
-// console.log(__dirname);
-// app.get('/podcast', (req, res) => {
-// 	// res.sendFile(path.join(__dirname + '/index.html'));
-// 	res.sendFile(path.join(__dirname + './test.html'));
-// });
+app.get('/sendData', (req, res) => {
+	fs.readFile('category-list.txt', (err, data) => {
+		if (err) {
+			console.log(err);
+			return;
+		}
 
-// app.get('/podcast', (req, res) => {
-// 	// res.sendFile(path.join(__dirname + '/index.html'));
-// 	res.sendFile(path.join(__dirname + '/static/index.html'));
-// });
+		let results = data.toString();
+		let parsed = JSON.parse(results);
+		// console.log(parsed, 'parsed in readfile backend');
+		res.send(parsed);
+	});
+});
 
-// let db;
-
-// let connectionString =
-// 	'mongodb+srv://iRatingUser:XbeycTPF2n5nqVrY@cluster0-b5bni.mongodb.net/iRatings?retryWrites=true&w=majority';
-// mongoose
-// 	.connect(connectionString, {
-// 		useNewUrlParser: true,
-// 		useUnifiedTopology: true,
-// 		useCreateIndex: true,
-// 		useFindAndModify: false
-// 	})
-// 	.then(() => {
-// 		console.log('DB connection was successful!');
-// 		var currentPath = process.cwd();
-// 		console.log(currentPath);
-// 		// app.listen(5000);
-// 	});
-
-// const ratingSchema = new mongoose.Schema({
-// 	name: String,
-// 	// description: String,
-// 	rating: Number
-// });
-
-// const Rating = mongoose.model('Rating', ratingSchema);
-// var currentPath = process.cwd();
-// console.log(currentPath);
-// app.listen(5000);
-// });
-
-// const array = [
-// 	'https://podcasts.apple.com/us/podcast/business-addicts-podcast-for-people-who-are-addicted/id976998315?uo=4',
-// 	'https://podcasts.apple.com/us/podcast/brick-order/id1506078603?uo=4',
-// 	'https://podcasts.apple.com/us/podcast/all-in-with-chamath-palihapitiya-jason-calacanis/id1502871393?uo=4',
-// 	'https://podcasts.apple.com/us/podcast/glorious-professionals/id1506387898?uo=4',
-// 	'https://podcasts.apple.com/us/podcast/traffic-secrets-underground-playbook-for-filling-your/id1504721836?uo=4'
-// ];
+app.post('/sendData', (req, res) => {
+	req.body = parsed.genres;
+	res.send('POST sent');
+});
 
 const array = [
 	// 'https://podcasts.apple.com/us/podcast/coronavirus-global-update/id1501720184?uo=4'
@@ -212,7 +184,7 @@ async function main(list) {
 			});
 
 			const podFromDb = await Rating.findOne({ title: object.title }).lean();
-			// console.log(podRating);
+			console.log(podRating, 'podRating');
 			try {
 				if (!podFromDb) {
 					try {
@@ -253,6 +225,47 @@ async function main(list) {
 			} catch (err) {
 				console.log('PROBLEM MORE LATER', err);
 			}
+
+			// try {
+			// 	if (!podFromDb) {
+			// 		try {
+			// 			testArray.push(podRating);
+			// 			console.log("item doesn't exist, I'll add it");
+
+			// 			podRating.save();
+			// 			console.log('TEST, NEW ITEM', object);
+			// 		} catch (error) {
+			// 			console.log('PROBLEM', error);
+			// 		}
+			// 	} else {
+			// 		console.log('item already exists, Ill update it.');
+			// 		try {
+			// 			// console.log('223', object);
+			// 			Rating.findOneAndUpdate(
+			// 				// $set: { rating: object.rating },
+
+			// 				{ title: object.title },
+			// 				{
+			// 					$set: {
+			// 						rating: object.rating,
+			// 						numberOfRatings: object.numberOfRatings
+			// 					}
+			// 				},
+			// 				{ new: true },
+			// 				function(err, res) {
+			// 					if (err) throw err;
+			// 					console.log('1 document updated');
+			// 				}
+			// 			);
+
+			// 			console.log('in DB after update', object);
+			// 		} catch (e) {
+			// 			console.log('PROBLEM LATER', e);
+			// 		}
+			// 	}
+			// } catch (err) {
+			// 	console.log('PROBLEM MORE LATER', err);
+			// }
 			// const allPods = await Rating.find();
 			// let result = JSON.stringify(allPods);
 			// // console.log(allPods);
@@ -299,10 +312,28 @@ async function main(list) {
 // 	res.sendFile(path.join(__dirname + '../../../static/index.html'));
 // });
 
+// const allPodsFromDb = Rating.find({ rating: { $gt: 4.9 }, numberOfRatings: { $gt: 500 } }, (error, data) => {
+// 	if (error) {
+// 		console.log(error);
+// 	} else {
+// 		console.log(data);
+// 	}
+// }).limit(20);
+// console.log(allPodsFromDb, 'allPodsFromDb');
+
 app.get('/podcasts', async (req, res) => {
 	try {
 		const podcast = await Rating.find({});
 		res.send(podcast);
+	} catch (e) {
+		res.status(500).send();
+	}
+});
+
+app.get('/topTwenty', async (req, res) => {
+	try {
+		const topTwenty = await Rating.find({ rating: { $gt: 4.9 }, numberOfRatings: { $gt: 500 } }).limit(20);
+		res.send(topTwenty);
 	} catch (e) {
 		res.status(500).send();
 	}
