@@ -175,6 +175,8 @@ async function main(list) {
 				console.log(numberOfRatings);
 				object['numberOfRatings'] = numberOfRatings;
 			});
+
+			//Add Listen Notes Call to add it's data to the DB
 			const podRating = new Rating({
 				title: object.title,
 				rating: object.rating,
@@ -280,6 +282,7 @@ async function main(list) {
 	}
 	console.log('ALL DONE SCANNING');
 }
+
 // let getAllPodcasts = async (req, res) => {
 // 	try {
 // 		const podcastsAll = await Rating.find();
