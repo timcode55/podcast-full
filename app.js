@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, 'static')));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }));
 // const PORT = process.env.PORT || 7000;
-const PORT = 5000;
+const PORT = 9500;
 
 connectDB();
 

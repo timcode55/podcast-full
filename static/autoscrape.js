@@ -227,7 +227,7 @@ fetch('http://localhost:5000/sendData')
 
 // GET ALL TOP PODCASTS FOR SPECIFIC GENRE
 //SCRAPE NUMBER
-function testing(array, i = 122) {
+function testing(array, i = 0) {
 	// console.log('120', array[i].name);
 	//for (let i = 21; i < 22; i++) {
 	let genreId = array[i].id;
