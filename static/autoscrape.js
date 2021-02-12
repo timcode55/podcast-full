@@ -209,7 +209,7 @@ testing(fullArray);
 
 // GET ALL TOP PODCASTS FOR SPECIFIC GENRE
 //SCRAPE NUMBER
-function testing(array, i = 112) {
+function testing(array, i = 2) {
 	// console.log('120', array[i].name);
 	//for (let i = 21; i < 22; i++) {
 	let genreId = array[i].id;
@@ -218,7 +218,7 @@ function testing(array, i = 112) {
 	titleDisplay.textContent = `CATEGORY - ${array[i].name.toUpperCase()}`;
 	// START OF PAGE TO SCRAPE
 	let page = 1;
-	getTopPodcastsByGenre(genreId, (page = 1));
+	getTopPodcastsByGenre(genreId, (page = 2));
 
 	setTimeout(() => {
 		if (array.length > i) testing(array, i + 1);
