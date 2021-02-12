@@ -192,14 +192,14 @@ function getCategories() {
 		array2.push(fullArray[i]);
 	}
 	array.forEach((item) => {
-		const option = new Option(item.name, item.name);
+		const option = new Option(item.name, item.id);
 		genreSelector.add(option, undefined);
 	});
 
 	// DIVIDE FULL ARRAY INTO SELECTION BOX 2
 
 	array2.forEach((el) => {
-		const option2 = new Option(el.name, el.name);
+		const option2 = new Option(el.name, el.id);
 		genreSelector2.add(option2, undefined);
 	});
 }
@@ -213,10 +213,12 @@ function getGenre() {
 
 	e.addEventListener('change', function() {
 		let selectedGenre = e.options[e.selectedIndex].text;
+		let genreId = e.options[e.selectedIndex].value;
+		genreIdArray.unshift(genreId);
 		newerArray = [];
 		let displayTitle = document.querySelector('.title');
 		displayTitle.innerHTML = `TOP PODCASTS - ${selectedGenre.toUpperCase()}`;
-		getGenreId(selectedGenre);
+		getTopPodcastsByGenre(genreId, (page = 1));
 	});
 }
 getGenre();
@@ -226,39 +228,17 @@ function getGenre2() {
 
 	e2.addEventListener('change', function() {
 		let selectedGenre = e2.options[e2.selectedIndex].text;
+		let genreId = e2.options[e2.selectedIndex].value;
+		genreIdArray.unshift(genreId);
 		newerArray = [];
 		let displayTitle = document.querySelector('.title');
 		displayTitle.innerHTML = `TOP PODCASTS - ${selectedGenre.toUpperCase()}`;
-		getGenreId(selectedGenre);
+		console.log(selectedGenre, 'selectedGenre');
+		// getGenreId(selectedGenre);
+		getTopPodcastsByGenre(genreId, (page = 1));
 	});
 }
 getGenre2();
-
-// GET ALL GENRE CATEGORIES OF PODCASTS
-
-function getGenreId(selectedGenre) {
-	fetch('https://listen-api.listennotes.com/api/v2/genres', {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
-			'X-ListenAPI-Key': '89c65a60479f48a18b39223f8f721ef1'
-		},
-		credentials: 'same-origin'
-	}).then((response) => {
-		response.json().then((data) => {
-			let genreArray = data.genres;
-			for (let i = 0; i < genreArray.length; i++) {
-				if (genreArray[i].name === selectedGenre) {
-					let genreId = genreArray[i].id;
-					genreIdArray.unshift(genreId);
-
-					getTopPodcastsByGenre(genreId, (page = 1));
-				}
-			}
-		});
-	});
-}
-getGenreId();
 
 // GET ALL TOP PODCASTS FOR SPECIFIC GENRE
 
@@ -288,25 +268,6 @@ function getTopPodcastsByGenre(genreId, page) {
 	});
 }
 getTopPodcastsByGenre();
-
-// GET ITUNES LINK DATA
-let newerArray = [];
-async function getItunesLink(data) {
-	let array = data.podcasts;
-	for (let i = 0; i < array.length; i++) {
-		let iTunesId = array[i].itunes_id;
-		const testingData = await axios
-			.get('/podcast_data?id=' + iTunesId)
-			.then((response) => {
-				newerArray.push(response.data.results[0].trackViewUrl);
-			})
-			.catch((error) => {
-				newerArray.push('https://podcasts.apple.com');
-				console.log(error);
-			});
-	}
-	return newerArray;
-}
 
 let display = document.querySelector('.listen');
 document.getElementById('right-arrow').style.visibility = 'hidden';
