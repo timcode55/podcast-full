@@ -163,16 +163,6 @@ const categoryArray = [
 ];
 let fullArray = [];
 function getCategories() {
-	// fetch('https://listen-api.listennotes.com/api/v2/genres', {
-	// 	method: 'GET',
-	// 	headers: {
-	// 		'Content-Type': 'application/json',
-	// 		'X-ListenAPI-Key': '89c65a60479f48a18b39223f8f721ef1'
-	// 	},
-	// 	credentials: 'same-origin'
-	// }).then((response) => {
-	// 	response.json().then((data) => {
-	// 		console.log(data, 'data in autoscrape');
 	let genreSelector = document.getElementById('selection');
 	let genreSelector2 = document.getElementById('selection2');
 
@@ -192,7 +182,7 @@ function getCategories() {
 		}
 		return 0;
 	});
-	console.log(fullArray);
+	// console.log(fullArray);
 
 	// DIVIDE FULL ARRAY INTO SELECTION BOX 1
 	for (let i = 0; i < 82; i++) {
@@ -217,17 +207,9 @@ function getCategories() {
 getCategories();
 testing(fullArray);
 
-fetch('http://localhost:5000/sendData')
-	.then((response) => {
-		return response.json();
-	})
-	.then((data) => {
-		// console.log(data);
-	});
-
 // GET ALL TOP PODCASTS FOR SPECIFIC GENRE
 //SCRAPE NUMBER
-function testing(array, i = 0) {
+function testing(array, i = 2) {
 	// console.log('120', array[i].name);
 	//for (let i = 21; i < 22; i++) {
 	let genreId = array[i].id;
@@ -237,11 +219,7 @@ function testing(array, i = 0) {
 	// START OF PAGE TO SCRAPE
 	let page = 1;
 	getTopPodcastsByGenre(genreId, (page = 1));
-	// array.shift(genreId);
-	// console.log('shifted array', array);
-	// if (i === 4) {
-	// 	loopDone();
-	// }
+
 	setTimeout(() => {
 		if (array.length > i) testing(array, i + 1);
 	}, 40000); // multiple i by 1000
@@ -271,22 +249,20 @@ function getTopPodcastsByGenre(genreId, page) {
 		response.json().then(async (data) => {
 			// console.log(data);
 			displayData(data);
+			console.log(data.podcasts, 'data');
 
 			// SCRAPE DATA AND ADD TO DATABASE
 			// console.log('data going into scraping', data.name);
 			let list = await getItunesLink(data);
-			axios.post('/podcasts', { urls: list }).then(function(response) {
+			axios.post('/podcasts', { pods: data.podcasts }).then(function(response) {
 				// console.log(response);
-				response.config.data.urls = [];
+			});
+			axios.post('/update', { urls: list, pods: data.podcasts }).then(function(response) {
+				// console.log(response);
 			});
 		});
 	});
 }
-// getTopPodcastsByGenre();
-
-// app.get('/sendData', (data) => {
-// 	console.log(data, 'data on frontend');
-// });
 
 // GET ITUNES LINK DATA
 let newerArray = [];
@@ -310,11 +286,6 @@ async function getItunesLink(data) {
 				newerArray.push('https://podcasts.apple.com');
 			});
 	}
-	// console.log(newerArray);
-	// document.querySelectorAll('.rating-container button.button.red.info').forEach((el, i) => {
-	// 	el.href = newerArray[i];
-	// 	// getData(data);
-	// });
 	return newerArray;
 }
 
@@ -322,16 +293,6 @@ let fullPodcastData;
 async function displayData(data) {
 	let display = document.querySelector('.listen');
 	display.innerHTML = `....Loading`;
-	// console.log('208 data', data);
-	// for (let item of data) {
-	// 	item.push({ test: 1 });
-	// }
-
-	// for (let j = 0; j < birdArray.length; j++) {
-	// 	console.log(birdArray[j].podcasts[j].title);
-	// }
-	// console.log(ratingArray);
-	// let ratingSubArray = [];
 	const response = await fetch('/podcasts');
 
 	fullPodcastData = fullPodcastData || (await response.json());
