@@ -31,6 +31,19 @@ app.get('/podcasts', async (req, res) => {
 	}
 });
 
+app.get('/fetchPod/', async (req, res) => {
+	try {
+		const podcast = await Rating.find({});
+		res.status(200).json({ sucess: true, data: podcast });
+	} catch (e) {
+		res.status(500).send();
+	}
+});
+
+app.get('fetchPod', async (req, res) => {
+	res.send(podcast);
+});
+
 app.use((req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*');
 	next();
