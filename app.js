@@ -35,6 +35,7 @@ app.use((req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*');
 	next();
 });
+
 app.get('/podcast_data', (req, res) => {
 	url = `https://itunes.apple.com/lookup?id=${req.query.id}`;
 	request({ url }, (error, response, body) => {
