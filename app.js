@@ -63,7 +63,7 @@ function testingResponse(array) {
 				console.log('PROBLEM', error);
 			}
 
-			console.log('in DB after update', array, 'is this it?');
+			// console.log('in DB after update', array, 'is this it?');
 		} catch (e) {
 			console.log('PROBLEM LATER', e);
 		}
