@@ -209,7 +209,7 @@ testing(fullArray);
 
 // GET ALL TOP PODCASTS FOR SPECIFIC GENRE
 //SCRAPE NUMBER
-function testing(array, i = 2) {
+function testing(array, i = 109) {
 	// console.log('120', array[i].name);
 	//for (let i = 21; i < 22; i++) {
 	let genreId = array[i].id;
