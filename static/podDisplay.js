@@ -337,16 +337,56 @@ async function displayData(data) {
 					title,
 					website
 				} = pod;
-				resultsArray.push([
-					image,
-					listennotesurl,
-					website,
-					description,
-					title,
-					rating,
-					numberOfRatings,
-					itunes
-				]);
+				let displayImage = document.createElement('img');
+				displayImage.classList.add('display-image');
+				let div = document.createElement('div');
+				div.classList.add('div-style');
+				displayImage.src = item[0];
+				a = document.createElement('a');
+				b = document.createElement('a');
+				c = document.createElement('a');
+				d = document.createElement('a');
+				b.href = item[2];
+				d.innerHTML = `<div class="podcontainer">
+    <div class="image">
+      <a href="${listennotesurl}" target="_blank"><img class="podimage" src="${image}" alt="pod1"></a>
+    </div>
+    <div class="podtitle">
+      <h1>${title.substring(0, 52)}</h1>
+    </div>
+    <div class="desc">
+      <p class="ptext">${description.substring(0, 200).replace(/(<([^>]+)>)/gi, '')}...</p>
+    </div>
+    <div class="podButtons">
+      <div class="webButton">
+      <a href=${website} target="_blank"><button>Website</button></a>
+      </div>
+      <div class="webButton">
+      <a href=${itunes} target="_blank"><button>iTunes Link</button></a>
+      </div>
+    </div>
+    <div class="contratings">
+        <div class="footeritem">
+          <img class="ratingimage" src="images/Hashtag-26-52px/icons8-hashtag-52.png" alt="ratingimage">
+          <p class="ratingtext"># of Ratings</p>
+          <p class="ratingtext">${numberOfRatings}</p>
+        </div>
+        <div class="footeritem">
+          <img class="ratingimage" src="images/Star-24-48px/icons8-star-48.png" alt="ratingimage">
+          <p class="ratingtext">iTunes Rating</p>
+          <p class="ratingtext">${rating}</p>
+        </div>
+        </div>
+      </div>`;
+				div.appendChild(d);
+				display.classList.add('block');
+				display.appendChild(div);
+				document.getElementById('right-arrow').style.visibility = 'visible';
+				if (page > 1) {
+					document.getElementById('left-arrow').style.visibility = 'visible';
+				}
+				let loader = document.getElementById('preloader');
+				loader.classList.add('hidden');
 			}
 		}
 	}
@@ -362,62 +402,62 @@ display.innerHTML = ``;
 // const result = dbArray.id.find(array[i].id);
 // console.log(result, 'result');
 
-for (let item of resultsArray) {
-	let displayImage = document.createElement('img');
-	displayImage.classList.add('display-image');
-	let div = document.createElement('div');
-	div.classList.add('div-style');
-	displayImage.src = item[0];
-	a = document.createElement('a');
-	b = document.createElement('a');
-	c = document.createElement('a');
-	d = document.createElement('a');
-	b.href = item[2];
-	// c.innerHTML = `
-	//     <a href="${item[1]}" target="_blank"><img class="img display-image" src=${item[0]}></a></img><br><div class ="toolTip">${item[3]
-	// .substring(0, 800)
-	// .replace(/(<([^>]+)>)/gi, '')}</div>`;
-	d.innerHTML = `<div class="podcontainer">
-    <div class="image">
-      <a href="${item[1]}" target="_blank"><img class="podimage" src="${item[0]}" alt="pod1"></a>
-    </div>
-    <div class="podtitle">
-      <h1>${item[4].substring(0, 52)}</h1>
-    </div>
-    <div class="desc">
-      <p class="ptext">${item[3].substring(0, 200).replace(/(<([^>]+)>)/gi, '')}...</p>
-    </div>
-    <div class="podButtons">
-      <div class="webButton">
-      <a href=${item[2]} target="_blank"><button>Website</button></a>
-      </div>
-      <div class="webButton">
-      <a href=${item[7]} target="_blank"><button>iTunes Link</button></a>
-      </div>
-    </div>
-    <div class="contratings">
-        <div class="footeritem">
-          <img class="ratingimage" src="images/Hashtag-26-52px/icons8-hashtag-52.png" alt="ratingimage">
-          <p class="ratingtext"># of Ratings</p>
-          <p class="ratingtext">${item[6]}</p>
-        </div>
-        <div class="footeritem">
-          <img class="ratingimage" src="images/Star-24-48px/icons8-star-48.png" alt="ratingimage">
-          <p class="ratingtext">iTunes Rating</p>
-          <p class="ratingtext">${item[5]}</p>
-        </div>
-        </div>
-      </div>`;
-	div.appendChild(d);
-	display.classList.add('block');
-	display.appendChild(div);
-	document.getElementById('right-arrow').style.visibility = 'visible';
-	if (page > 1) {
-		document.getElementById('left-arrow').style.visibility = 'visible';
-	}
-	let loader = document.getElementById('preloader');
-	loader.classList.add('hidden');
-}
+// for (let item of resultsArray) {
+// 	let displayImage = document.createElement('img');
+// 	displayImage.classList.add('display-image');
+// 	let div = document.createElement('div');
+// 	div.classList.add('div-style');
+// 	displayImage.src = item[0];
+// 	a = document.createElement('a');
+// 	b = document.createElement('a');
+// 	c = document.createElement('a');
+// 	d = document.createElement('a');
+// 	b.href = item[2];
+// 	// c.innerHTML = `
+// 	//     <a href="${item[1]}" target="_blank"><img class="img display-image" src=${item[0]}></a></img><br><div class ="toolTip">${item[3]
+// 	// .substring(0, 800)
+// 	// .replace(/(<([^>]+)>)/gi, '')}</div>`;
+// 	d.innerHTML = `<div class="podcontainer">
+//     <div class="image">
+//       <a href="${item[1]}" target="_blank"><img class="podimage" src="${item[0]}" alt="pod1"></a>
+//     </div>
+//     <div class="podtitle">
+//       <h1>${item[4].substring(0, 52)}</h1>
+//     </div>
+//     <div class="desc">
+//       <p class="ptext">${item[3].substring(0, 200).replace(/(<([^>]+)>)/gi, '')}...</p>
+//     </div>
+//     <div class="podButtons">
+//       <div class="webButton">
+//       <a href=${item[2]} target="_blank"><button>Website</button></a>
+//       </div>
+//       <div class="webButton">
+//       <a href=${item[7]} target="_blank"><button>iTunes Link</button></a>
+//       </div>
+//     </div>
+//     <div class="contratings">
+//         <div class="footeritem">
+//           <img class="ratingimage" src="images/Hashtag-26-52px/icons8-hashtag-52.png" alt="ratingimage">
+//           <p class="ratingtext"># of Ratings</p>
+//           <p class="ratingtext">${item[6]}</p>
+//         </div>
+//         <div class="footeritem">
+//           <img class="ratingimage" src="images/Star-24-48px/icons8-star-48.png" alt="ratingimage">
+//           <p class="ratingtext">iTunes Rating</p>
+//           <p class="ratingtext">${item[5]}</p>
+//         </div>
+//         </div>
+//       </div>`;
+// 	div.appendChild(d);
+// 	display.classList.add('block');
+// 	display.appendChild(div);
+// 	document.getElementById('right-arrow').style.visibility = 'visible';
+// 	if (page > 1) {
+// 		document.getElementById('left-arrow').style.visibility = 'visible';
+// 	}
+// 	let loader = document.getElementById('preloader');
+// 	loader.classList.add('hidden');
+// }
 // }
 
 // ARROW FOR MORE RESULTS
