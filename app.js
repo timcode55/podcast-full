@@ -31,6 +31,16 @@ app.get('/podcasts', async (req, res) => {
 	}
 });
 
+app.get('/findId', async (req, res) => {
+	try {
+		console.log(req.body.id, 'req.body.id');
+		const podcast = await Rating.find({ id: req.body.id }).lean();
+		res.send(podcast);
+	} catch (e) {
+		res.status(500).send();
+	}
+});
+
 app.use((req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*');
 	next();

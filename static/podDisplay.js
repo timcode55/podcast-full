@@ -192,14 +192,14 @@ function getCategories() {
 		array2.push(fullArray[i]);
 	}
 	array.forEach((item) => {
-		const option = new Option(item.name, item.id);
+		const option = new Option(item.name, item.name);
 		genreSelector.add(option, undefined);
 	});
 
 	// DIVIDE FULL ARRAY INTO SELECTION BOX 2
 
 	array2.forEach((el) => {
-		const option2 = new Option(el.name, el.id);
+		const option2 = new Option(el.name, el.name);
 		genreSelector2.add(option2, undefined);
 	});
 }
@@ -213,12 +213,10 @@ function getGenre() {
 
 	e.addEventListener('change', function() {
 		let selectedGenre = e.options[e.selectedIndex].text;
-		let genreId = e.options[e.selectedIndex].value;
-		genreIdArray.unshift(genreId);
 		newerArray = [];
 		let displayTitle = document.querySelector('.title');
 		displayTitle.innerHTML = `TOP PODCASTS - ${selectedGenre.toUpperCase()}`;
-		getTopPodcastsByGenre(genreId, (page = 1));
+		getGenreId(selectedGenre);
 	});
 }
 getGenre();
@@ -228,17 +226,39 @@ function getGenre2() {
 
 	e2.addEventListener('change', function() {
 		let selectedGenre = e2.options[e2.selectedIndex].text;
-		let genreId = e2.options[e2.selectedIndex].value;
-		genreIdArray.unshift(genreId);
 		newerArray = [];
 		let displayTitle = document.querySelector('.title');
 		displayTitle.innerHTML = `TOP PODCASTS - ${selectedGenre.toUpperCase()}`;
-		console.log(selectedGenre, 'selectedGenre');
-		// getGenreId(selectedGenre);
-		getTopPodcastsByGenre(genreId, (page = 1));
+		getGenreId(selectedGenre);
 	});
 }
 getGenre2();
+
+// GET ALL GENRE CATEGORIES OF PODCASTS
+
+function getGenreId(selectedGenre) {
+	fetch('https://listen-api.listennotes.com/api/v2/genres', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			'X-ListenAPI-Key': '89c65a60479f48a18b39223f8f721ef1'
+		},
+		credentials: 'same-origin'
+	}).then((response) => {
+		response.json().then((data) => {
+			let genreArray = data.genres;
+			for (let i = 0; i < genreArray.length; i++) {
+				if (genreArray[i].name === selectedGenre) {
+					let genreId = genreArray[i].id;
+					genreIdArray.unshift(genreId);
+
+					getTopPodcastsByGenre(genreId, (page = 1));
+				}
+			}
+		});
+	});
+}
+getGenreId();
 
 // GET ALL TOP PODCASTS FOR SPECIFIC GENRE
 
@@ -269,88 +289,272 @@ function getTopPodcastsByGenre(genreId, page) {
 }
 getTopPodcastsByGenre();
 
+// GET ITUNES LINK DATA
+let newerArray = [];
+async function getItunesLink(data) {
+	let array = data.podcasts;
+	for (let i = 0; i < array.length; i++) {
+		let iTunesId = array[i].itunes_id;
+		const testingData = await axios
+			.get('/podcast_data?id=' + iTunesId)
+			.then((response) => {
+				newerArray.push(response.data.results[0].trackViewUrl);
+			})
+			.catch((error) => {
+				newerArray.push('https://podcasts.apple.com');
+				console.log(error);
+			});
+	}
+	return newerArray;
+}
+
 let display = document.querySelector('.listen');
 document.getElementById('right-arrow').style.visibility = 'hidden';
 document.getElementById('left-arrow').style.visibility = 'hidden';
 // let fullPodcastData;
+
+// async function displayData(data) {
+// 	console.log(data, 'data in front end');
+// 	const response = await fetch('/podcasts');
+// 	const responseData = await response.json();
+// 	console.log(responseData, 'response');
+
+//LOOP AND SEARCH FOR BACKEND DATA
+
+// 	const dataArray = data.podcasts;
+// 	for (let item of dataArray) {
+// 		// for (let pod of responseData) {
+// 		const { image, description, listennotesurl, title, website, itunes } = item;
+// 		// if (pod.id === item.id) {
+// 		// console.log(pod, 'pod yeaaaaa');
+// 		// const {
+// 		// description,
+// 		// genre,
+// 		// image,
+// 		// itunes,
+// 		// listennotesurl,
+// 		// numberOfRatings,
+// 		// rating
+// 		// title
+// 		// website
+// 		// } = pod;
+// 		let displayImage = document.createElement('img');
+// 		displayImage.classList.add('display-image');
+// 		let div = document.createElement('div');
+// 		div.classList.add('div-style');
+// 		console.log(item, 'item in creation phase');
+// 		displayImage.src = item[0];
+// 		a = document.createElement('a');
+// 		b = document.createElement('a');
+// 		c = document.createElement('a');
+// 		d = document.createElement('a');
+// 		b.href = item[2];
+// 		d.innerHTML = `<div class="podcontainer">
+//     <div class="image">
+//       <a href="${listennotesurl}" target="_blank"><img class="podimage" src="${image}" alt="pod1"></a>
+//     </div>
+//     <div class="podtitle">
+//       <h1>${title.substring(0, 52)}</h1>
+//     </div>
+//     <div class="desc">
+//       <p class="ptext">${description.substring(0, 200).replace(/(<([^>]+)>)/gi, '')}...</p>
+//     </div>
+//     <div class="podButtons">
+//       <div class="webButton">
+//       <a href=${website} target="_blank"><button>Website</button></a>
+//       </div>
+//       <div class="webButton">
+//       <a href=${itunes} target="_blank"><button>iTunes Link</button></a>
+//       </div>
+//     </div>
+//     <div class="contratings">
+//         <div class="footeritem">
+//           <img class="ratingimage" src="images/Hashtag-26-52px/icons8-hashtag-52.png" alt="ratingimage">
+//           <p class="ratingtext"># of Ratings</p>
+//           <p class="ratingtext">${4}</p>
+//         </div>
+//         <div class="footeritem">
+//           <img class="ratingimage" src="images/Star-24-48px/icons8-star-48.png" alt="ratingimage">
+//           <p class="ratingtext">iTunes Rating</p>
+//           <p class="ratingtext">${4}</p>
+//         </div>
+//         </div>
+//       </div>`;
+// 		div.appendChild(d);
+// 		display.classList.add('block');
+// 		display.appendChild(div);
+// 		document.getElementById('right-arrow').style.visibility = 'visible';
+// 		if (page > 1) {
+// 			document.getElementById('left-arrow').style.visibility = 'visible';
+// 		}
+// 		let loader = document.getElementById('preloader');
+// 		loader.classList.add('hidden');
+// 		// }
+// 		// }
+// 	}
+// }
 let resultsArray = [];
 async function displayData(data) {
+	// console.log(data, 'data in front end');
 	const response = await fetch('/podcasts');
 	const responseData = await response.json();
+	// console.log(responseData, 'response');
 
 	//LOOP AND SEARCH FOR BACKEND DATA
-
-	const dataArray = data.podcasts;
-	for (let item of dataArray) {
-		for (let pod of responseData) {
+	for (let pod of data.podcasts) {
+		for (let item of responseData) {
 			if (pod.id === item.id) {
-				const {
-					description,
-					genre,
-					image,
-					itunes,
-					listennotesurl,
-					numberOfRatings,
-					rating,
-					title,
-					website
-				} = pod;
-				let displayImage = document.createElement('img');
-				displayImage.classList.add('display-image');
-				let div = document.createElement('div');
-				div.classList.add('div-style');
-				displayImage.src = item[0];
-				a = document.createElement('a');
-				b = document.createElement('a');
-				c = document.createElement('a');
-				d = document.createElement('a');
-				b.href = item[2];
-				d.innerHTML = `<div class="podcontainer">
+				if (item.rating === undefined) {
+					pod.newRating = 'N/A';
+				} else {
+					pod.newRating = item.rating;
+				}
+				pod.numberOfRatings = item.numberOfRatings || 'N/A';
+				pod.itunes = item.itunes;
+			}
+		}
+	}
+	display.innerHTML = ``;
+	let array = data.podcasts;
+	// console.log(array, 'array with ratings');
+	let resultsArray = [];
+	for (let i = 0; i < array.length; i++) {
+		resultsArray.push([
+			array[i].image,
+			array[i].listennotesurl,
+			array[i].website,
+			array[i].description,
+			array[i].title,
+			array[i].newRating,
+			array[i].numberOfRatings,
+			array[i].itunes
+		]);
+	}
+	for (let item of resultsArray) {
+		let displayImage = document.createElement('img');
+		displayImage.classList.add('display-image');
+		let div = document.createElement('div');
+		div.classList.add('div-style');
+		displayImage.src = item[0];
+		a = document.createElement('a');
+		b = document.createElement('a');
+		c = document.createElement('a');
+		d = document.createElement('a');
+		b.href = item[2];
+		// c.innerHTML = `
+		//     <a href="${item[1]}" target="_blank"><img class="img display-image" src=${item[0]}></a></img><br><div class ="toolTip">${item[3]
+		// .substring(0, 800)
+		// .replace(/(<([^>]+)>)/gi, '')}</div>`;
+		d.innerHTML = `<div class="podcontainer">
     <div class="image">
-      <a href="${listennotesurl}" target="_blank"><img class="podimage" src="${image}" alt="pod1"></a>
+      <a href="${item[1]}" target="_blank"><img class="podimage" src="${item[0]}" alt="pod1"></a>
     </div>
     <div class="podtitle">
-      <h1>${title.substring(0, 52)}</h1>
+      <h1>${item[4].substring(0, 52)}</h1>
     </div>
     <div class="desc">
-      <p class="ptext">${description.substring(0, 200).replace(/(<([^>]+)>)/gi, '')}...</p>
+      <p class="ptext">${item[3].substring(0, 200).replace(/(<([^>]+)>)/gi, '')}...</p>
     </div>
     <div class="podButtons">
       <div class="webButton">
-      <a href=${website} target="_blank"><button>Website</button></a>
+      <a href=${item[2]} target="_blank"><button>Website</button></a>
       </div>
       <div class="webButton">
-      <a href=${itunes} target="_blank"><button>iTunes Link</button></a>
+      <a href=${item[7]} target="_blank"><button>iTunes Link</button></a>
       </div>
     </div>
     <div class="contratings">
         <div class="footeritem">
           <img class="ratingimage" src="images/Hashtag-26-52px/icons8-hashtag-52.png" alt="ratingimage">
           <p class="ratingtext"># of Ratings</p>
-          <p class="ratingtext">${numberOfRatings}</p>
+          <p class="ratingtext">${item[6]}</p>
         </div>
         <div class="footeritem">
           <img class="ratingimage" src="images/Star-24-48px/icons8-star-48.png" alt="ratingimage">
           <p class="ratingtext">iTunes Rating</p>
-          <p class="ratingtext">${rating}</p>
+          <p class="ratingtext">${item[5]}</p>
         </div>
         </div>
       </div>`;
-				div.appendChild(d);
-				display.classList.add('block');
-				display.appendChild(div);
-				document.getElementById('right-arrow').style.visibility = 'visible';
-				if (page > 1) {
-					document.getElementById('left-arrow').style.visibility = 'visible';
-				}
-				let loader = document.getElementById('preloader');
-				loader.classList.add('hidden');
-			}
+		div.appendChild(d);
+		display.classList.add('block');
+		display.appendChild(div);
+		document.getElementById('right-arrow').style.visibility = 'visible';
+		if (page > 1) {
+			document.getElementById('left-arrow').style.visibility = 'visible';
 		}
+		let loader = document.getElementById('preloader');
+		loader.classList.add('hidden');
 	}
 }
 
-display.innerHTML = ``;
+//GET FULL DATABASE OBJECT AND USE THAT
+
+// display.innerHTML = ``;
+// let array = data.podcasts;
+// let dbArray = responseData;
+
+// for (let i = 0; i < resultsArray.length; i++) {
+// const result = dbArray.id.find(array[i].id);
+// console.log(result, 'result');
+
+// for (let item of resultsArray) {
+// 	let displayImage = document.createElement('img');
+// 	displayImage.classList.add('display-image');
+// 	let div = document.createElement('div');
+// 	div.classList.add('div-style');
+// 	displayImage.src = item[0];
+// 	a = document.createElement('a');
+// 	b = document.createElement('a');
+// 	c = document.createElement('a');
+// 	d = document.createElement('a');
+// 	b.href = item[2];
+// 	// c.innerHTML = `
+// 	//     <a href="${item[1]}" target="_blank"><img class="img display-image" src=${item[0]}></a></img><br><div class ="toolTip">${item[3]
+// 	// .substring(0, 800)
+// 	// .replace(/(<([^>]+)>)/gi, '')}</div>`;
+// 	d.innerHTML = `<div class="podcontainer">
+//     <div class="image">
+//       <a href="${item[1]}" target="_blank"><img class="podimage" src="${item[0]}" alt="pod1"></a>
+//     </div>
+//     <div class="podtitle">
+//       <h1>${item[4].substring(0, 52)}</h1>
+//     </div>
+//     <div class="desc">
+//       <p class="ptext">${item[3].substring(0, 200).replace(/(<([^>]+)>)/gi, '')}...</p>
+//     </div>
+//     <div class="podButtons">
+//       <div class="webButton">
+//       <a href=${item[2]} target="_blank"><button>Website</button></a>
+//       </div>
+//       <div class="webButton">
+//       <a href=${item[7]} target="_blank"><button>iTunes Link</button></a>
+//       </div>
+//     </div>
+//     <div class="contratings">
+//         <div class="footeritem">
+//           <img class="ratingimage" src="images/Hashtag-26-52px/icons8-hashtag-52.png" alt="ratingimage">
+//           <p class="ratingtext"># of Ratings</p>
+//           <p class="ratingtext">${item[6]}</p>
+//         </div>
+//         <div class="footeritem">
+//           <img class="ratingimage" src="images/Star-24-48px/icons8-star-48.png" alt="ratingimage">
+//           <p class="ratingtext">iTunes Rating</p>
+//           <p class="ratingtext">${item[5]}</p>
+//         </div>
+//         </div>
+//       </div>`;
+// 	div.appendChild(d);
+// 	display.classList.add('block');
+// 	display.appendChild(div);
+// 	document.getElementById('right-arrow').style.visibility = 'visible';
+// 	if (page > 1) {
+// 		document.getElementById('left-arrow').style.visibility = 'visible';
+// 	}
+// 	let loader = document.getElementById('preloader');
+// 	loader.classList.add('hidden');
+// }
+// }
 
 // ARROW FOR MORE RESULTS
 let loader = document.getElementById('preloader');
