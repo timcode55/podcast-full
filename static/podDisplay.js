@@ -192,14 +192,14 @@ function getCategories() {
 		array2.push(fullArray[i]);
 	}
 	array.forEach((item) => {
-		const option = new Option(item.name, item.name);
+		const option = new Option(item.name, item.id);
 		genreSelector.add(option, undefined);
 	});
 
 	// DIVIDE FULL ARRAY INTO SELECTION BOX 2
 
 	array2.forEach((el) => {
-		const option2 = new Option(el.name, el.name);
+		const option2 = new Option(el.name, el.id);
 		genreSelector2.add(option2, undefined);
 	});
 }
@@ -213,10 +213,10 @@ function getGenre() {
 
 	e.addEventListener('change', function() {
 		let selectedGenre = e.options[e.selectedIndex].text;
-		newerArray = [];
+		let genreId = e.options[e.selectedIndex].value;
 		let displayTitle = document.querySelector('.title');
 		displayTitle.innerHTML = `TOP PODCASTS - ${selectedGenre.toUpperCase()}`;
-		getGenreId(selectedGenre);
+		getTopPodcastsByGenre(genreId, (page = 1));
 	});
 }
 getGenre();
@@ -226,39 +226,39 @@ function getGenre2() {
 
 	e2.addEventListener('change', function() {
 		let selectedGenre = e2.options[e2.selectedIndex].text;
-		newerArray = [];
+		let genreId = e2.options[e2.selectedIndex].value;
 		let displayTitle = document.querySelector('.title');
 		displayTitle.innerHTML = `TOP PODCASTS - ${selectedGenre.toUpperCase()}`;
-		getGenreId(selectedGenre);
+		getTopPodcastsByGenre(genreId, (page = 1));
 	});
 }
 getGenre2();
 
 // GET ALL GENRE CATEGORIES OF PODCASTS
 
-function getGenreId(selectedGenre) {
-	fetch('https://listen-api.listennotes.com/api/v2/genres', {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
-			'X-ListenAPI-Key': '89c65a60479f48a18b39223f8f721ef1'
-		},
-		credentials: 'same-origin'
-	}).then((response) => {
-		response.json().then((data) => {
-			let genreArray = data.genres;
-			for (let i = 0; i < genreArray.length; i++) {
-				if (genreArray[i].name === selectedGenre) {
-					let genreId = genreArray[i].id;
-					genreIdArray.unshift(genreId);
+// function getGenreId(selectedGenre) {
+// 	fetch('https://listen-api.listennotes.com/api/v2/genres', {
+// 		method: 'GET',
+// 		headers: {
+// 			'Content-Type': 'application/json',
+// 			'X-ListenAPI-Key': '89c65a60479f48a18b39223f8f721ef1'
+// 		},
+// 		credentials: 'same-origin'
+// 	}).then((response) => {
+// 		response.json().then((data) => {
+// 			let genreArray = data.genres;
+// 			for (let i = 0; i < genreArray.length; i++) {
+// 				if (genreArray[i].name === selectedGenre) {
+// 					let genreId = genreArray[i].id;
+// 					genreIdArray.unshift(genreId);
 
-					getTopPodcastsByGenre(genreId, (page = 1));
-				}
-			}
-		});
-	});
-}
-getGenreId();
+// 					getTopPodcastsByGenre(genreId, (page = 1));
+// 				}
+// 			}
+// 		});
+// 	});
+// }
+// getGenreId();
 
 // GET ALL TOP PODCASTS FOR SPECIFIC GENRE
 
@@ -311,88 +311,7 @@ async function getItunesLink(data) {
 let display = document.querySelector('.listen');
 document.getElementById('right-arrow').style.visibility = 'hidden';
 document.getElementById('left-arrow').style.visibility = 'hidden';
-// let fullPodcastData;
 
-// async function displayData(data) {
-// 	console.log(data, 'data in front end');
-// 	const response = await fetch('/podcasts');
-// 	const responseData = await response.json();
-// 	console.log(responseData, 'response');
-
-//LOOP AND SEARCH FOR BACKEND DATA
-
-// 	const dataArray = data.podcasts;
-// 	for (let item of dataArray) {
-// 		// for (let pod of responseData) {
-// 		const { image, description, listennotesurl, title, website, itunes } = item;
-// 		// if (pod.id === item.id) {
-// 		// console.log(pod, 'pod yeaaaaa');
-// 		// const {
-// 		// description,
-// 		// genre,
-// 		// image,
-// 		// itunes,
-// 		// listennotesurl,
-// 		// numberOfRatings,
-// 		// rating
-// 		// title
-// 		// website
-// 		// } = pod;
-// 		let displayImage = document.createElement('img');
-// 		displayImage.classList.add('display-image');
-// 		let div = document.createElement('div');
-// 		div.classList.add('div-style');
-// 		console.log(item, 'item in creation phase');
-// 		displayImage.src = item[0];
-// 		a = document.createElement('a');
-// 		b = document.createElement('a');
-// 		c = document.createElement('a');
-// 		d = document.createElement('a');
-// 		b.href = item[2];
-// 		d.innerHTML = `<div class="podcontainer">
-//     <div class="image">
-//       <a href="${listennotesurl}" target="_blank"><img class="podimage" src="${image}" alt="pod1"></a>
-//     </div>
-//     <div class="podtitle">
-//       <h1>${title.substring(0, 52)}</h1>
-//     </div>
-//     <div class="desc">
-//       <p class="ptext">${description.substring(0, 200).replace(/(<([^>]+)>)/gi, '')}...</p>
-//     </div>
-//     <div class="podButtons">
-//       <div class="webButton">
-//       <a href=${website} target="_blank"><button>Website</button></a>
-//       </div>
-//       <div class="webButton">
-//       <a href=${itunes} target="_blank"><button>iTunes Link</button></a>
-//       </div>
-//     </div>
-//     <div class="contratings">
-//         <div class="footeritem">
-//           <img class="ratingimage" src="images/Hashtag-26-52px/icons8-hashtag-52.png" alt="ratingimage">
-//           <p class="ratingtext"># of Ratings</p>
-//           <p class="ratingtext">${4}</p>
-//         </div>
-//         <div class="footeritem">
-//           <img class="ratingimage" src="images/Star-24-48px/icons8-star-48.png" alt="ratingimage">
-//           <p class="ratingtext">iTunes Rating</p>
-//           <p class="ratingtext">${4}</p>
-//         </div>
-//         </div>
-//       </div>`;
-// 		div.appendChild(d);
-// 		display.classList.add('block');
-// 		display.appendChild(div);
-// 		document.getElementById('right-arrow').style.visibility = 'visible';
-// 		if (page > 1) {
-// 			document.getElementById('left-arrow').style.visibility = 'visible';
-// 		}
-// 		let loader = document.getElementById('preloader');
-// 		loader.classList.add('hidden');
-// 		// }
-// 		// }
-// 	}
-// }
 let resultsArray = [];
 async function displayData(data) {
 	// console.log(data, 'data in front end');
