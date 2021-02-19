@@ -396,23 +396,39 @@ document.getElementById('left-arrow').style.visibility = 'hidden';
 let resultsArray = [];
 async function displayData(data) {
 	// console.log(data, 'data in front end');
-	const response = await fetch('/podcasts');
-	const responseData = await response.json();
-	// console.log(responseData, 'response');
 
 	//LOOP AND SEARCH FOR BACKEND DATA
 	for (let pod of data.podcasts) {
-		for (let item of responseData) {
-			if (pod.id === item.id) {
-				if (item.rating === undefined) {
-					pod.newRating = 'N/A';
-				} else {
-					pod.newRating = item.rating;
-				}
-				pod.numberOfRatings = item.numberOfRatings || 'N/A';
-				pod.itunes = item.itunes;
+		// console.log(pod, 'pod');
+		const id = { id: pod.id };
+		const response = axios({
+			method: 'post',
+			url: '/findId',
+			data: {
+				id: id,
+				firstName: 'Fred',
+				lastName: 'Flintstone'
 			}
-		}
+		})
+			.then(function(response) {
+				console.log(response, 'response');
+			})
+			.catch(function(error) {
+				console.log(error);
+			});
+		// const data = await response.data;
+		// console.log(data, 'response');
+		// for (let item of responseData) {
+		// 	if (pod.id === item.id) {
+		// 		if (item.rating === undefined) {
+		// 			pod.newRating = 'N/A';
+		// 		} else {
+		// 			pod.newRating = item.rating;
+		// 		}
+		// 		pod.numberOfRatings = item.numberOfRatings || 'N/A';
+		// 		pod.itunes = item.itunes;
+		// 	// }
+		// }
 	}
 	display.innerHTML = ``;
 	let array = data.podcasts;

@@ -33,8 +33,8 @@ app.get('/podcasts', async (req, res) => {
 
 app.get('/findId', async (req, res) => {
 	try {
-		console.log(req.body.id, 'req.body.id');
-		const podcast = await Rating.find({ id: req.body.id }).lean();
+		console.log(req.data, 'req.body.id');
+		const podcast = await Rating.find({ id }).lean();
 		res.send(podcast);
 	} catch (e) {
 		res.status(500).send();
