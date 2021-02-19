@@ -31,6 +31,7 @@ app.get('/podcasts', async (req, res) => {
 	}
 });
 
+<<<<<<< HEAD
 app.get('/findId', async (req, res) => {
 	try {
 		console.log(req.data, 'req.body.id');
@@ -41,6 +42,8 @@ app.get('/findId', async (req, res) => {
 	}
 });
 
+=======
+>>>>>>> hostingfiles
 app.use((req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*');
 	next();
