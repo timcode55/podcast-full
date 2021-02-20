@@ -182,7 +182,6 @@ function getCategories() {
 		}
 		return 0;
 	});
-	// console.log(fullArray);
 
 	// DIVIDE FULL ARRAY INTO SELECTION BOX 1
 	for (let i = 0; i < 82; i++) {
@@ -234,32 +233,6 @@ function getGenre2() {
 }
 getGenre2();
 
-// GET ALL GENRE CATEGORIES OF PODCASTS
-
-// function getGenreId(selectedGenre) {
-// 	fetch('https://listen-api.listennotes.com/api/v2/genres', {
-// 		method: 'GET',
-// 		headers: {
-// 			'Content-Type': 'application/json',
-// 			'X-ListenAPI-Key': '89c65a60479f48a18b39223f8f721ef1'
-// 		},
-// 		credentials: 'same-origin'
-// 	}).then((response) => {
-// 		response.json().then((data) => {
-// 			let genreArray = data.genres;
-// 			for (let i = 0; i < genreArray.length; i++) {
-// 				if (genreArray[i].name === selectedGenre) {
-// 					let genreId = genreArray[i].id;
-// 					genreIdArray.unshift(genreId);
-
-// 					getTopPodcastsByGenre(genreId, (page = 1));
-// 				}
-// 			}
-// 		});
-// 	});
-// }
-// getGenreId();
-
 // GET ALL TOP PODCASTS FOR SPECIFIC GENRE
 
 function getTopPodcastsByGenre(genreId, page) {
@@ -308,14 +281,13 @@ async function getItunesLink(data) {
 	return newerArray;
 }
 
+// DISPLAY DATA
 let display = document.querySelector('.listen');
 document.getElementById('right-arrow').style.visibility = 'hidden';
 document.getElementById('left-arrow').style.visibility = 'hidden';
 
 let resultsArray = [];
 async function displayData(data) {
-	// console.log(data, 'data in front end');
-
 	//LOOP AND SEARCH FOR BACKEND DATA
 	for (let pod of data.podcasts) {
 		// console.log(pod, 'pod');
@@ -324,172 +296,91 @@ async function displayData(data) {
 			method: 'post',
 			url: '/findId',
 			data: {
-				id: id,
-				firstName: 'Fred',
-				lastName: 'Flintstone'
+				id: id
 			}
 		})
 			.then(function(response) {
-				console.log(response, 'response');
+				pod['rating'] = response.data.rating;
+				pod['numberOfRatings'] = response.data.numberOfRatings || 'N/A';
+				pod['itunes'] = response.data.itunes;
 			})
 			.catch(function(error) {
 				console.log(error);
 			});
-		// const data = await response.data;
-		// console.log(data, 'response');
-		// for (let item of responseData) {
-		// 	if (pod.id === item.id) {
-		// 		if (item.rating === undefined) {
-		// 			pod.newRating = 'N/A';
-		// 		} else {
-		// 			pod.newRating = item.rating;
-		// 		}
-		// 		pod.numberOfRatings = item.numberOfRatings || 'N/A';
-		// 		pod.itunes = item.itunes;
-		// 	// }
-		// }
 	}
 	display.innerHTML = ``;
 	let array = data.podcasts;
-	// console.log(array, 'array with ratings');
-	let resultsArray = [];
-	for (let i = 0; i < array.length; i++) {
-		resultsArray.push([
-			array[i].image,
-			array[i].listennotesurl,
-			array[i].website,
-			array[i].description,
-			array[i].title,
-			array[i].newRating,
-			array[i].numberOfRatings,
-			array[i].itunes
-		]);
-	}
-	for (let item of resultsArray) {
-		let displayImage = document.createElement('img');
-		displayImage.classList.add('display-image');
-		let div = document.createElement('div');
-		div.classList.add('div-style');
-		displayImage.src = item[0];
-		a = document.createElement('a');
-		b = document.createElement('a');
-		c = document.createElement('a');
-		d = document.createElement('a');
-		b.href = item[2];
-		// c.innerHTML = `
-		//     <a href="${item[1]}" target="_blank"><img class="img display-image" src=${item[0]}></a></img><br><div class ="toolTip">${item[3]
-		// .substring(0, 800)
-		// .replace(/(<([^>]+)>)/gi, '')}</div>`;
-		d.innerHTML = `<div class="podcontainer">
-    <div class="image">
-      <a href="${item[1]}" target="_blank"><img class="podimage" src="${item[0]}" alt="pod1"></a>
-    </div>
-    <div class="podtitle">
-      <h1>${item[4].substring(0, 52)}</h1>
-    </div>
-    <div class="desc">
-      <p class="ptext">${item[3].substring(0, 200).replace(/(<([^>]+)>)/gi, '')}...</p>
-    </div>
-    <div class="podButtons">
-      <div class="webButton">
-      <a href=${item[2]} target="_blank"><button>Website</button></a>
-      </div>
-      <div class="webButton">
-      <a href=${item[7]} target="_blank"><button>iTunes Link</button></a>
-      </div>
-    </div>
-    <div class="contratings">
-        <div class="footeritem">
-          <img class="ratingimage" src="images/Hashtag-26-52px/icons8-hashtag-52.png" alt="ratingimage">
-          <p class="ratingtext"># of Ratings</p>
-          <p class="ratingtext">${item[6]}</p>
+	const delay = () => {
+		let resultsArray = [];
+		setTimeout(() => {
+			for (let i = 0; i < array.length; i++) {
+				resultsArray.push([
+					array[i].image,
+					array[i].listennotes_url,
+					array[i].website,
+					array[i].description,
+					array[i].title,
+					array[i].rating,
+					array[i].numberOfRatings,
+					array[i].itunes
+				]);
+			}
+			for (let item of resultsArray) {
+				let displayImage = document.createElement('img');
+				displayImage.classList.add('display-image');
+				let div = document.createElement('div');
+				div.classList.add('div-style');
+				displayImage.src = item[0];
+				a = document.createElement('a');
+				b = document.createElement('a');
+				c = document.createElement('a');
+				d = document.createElement('a');
+				b.href = item[2];
+				d.innerHTML = `<div class="podcontainer">
+        <div class="image">
+          <a href="${item[1]}" target="_blank"><img class="podimage" src="${item[0]}" alt="pod1"></a>
         </div>
-        <div class="footeritem">
-          <img class="ratingimage" src="images/Star-24-48px/icons8-star-48.png" alt="ratingimage">
-          <p class="ratingtext">iTunes Rating</p>
-          <p class="ratingtext">${item[5]}</p>
+        <div class="podtitle">
+          <h1>${item[4].substring(0, 52)}</h1>
         </div>
+        <div class="desc">
+          <p class="ptext">${item[3].substring(0, 200).replace(/(<([^>]+)>)/gi, '')}...</p>
         </div>
-      </div>`;
-		div.appendChild(d);
-		display.classList.add('block');
-		display.appendChild(div);
-		document.getElementById('right-arrow').style.visibility = 'visible';
-		if (page > 1) {
-			document.getElementById('left-arrow').style.visibility = 'visible';
-		}
-		let loader = document.getElementById('preloader');
-		loader.classList.add('hidden');
-	}
+        <div class="podButtons">
+          <div class="webButton">
+          <a href=${item[2]} target="_blank"><button>Website</button></a>
+          </div>
+          <div class="webButton">
+          <a href=${item[7]} target="_blank"><button>iTunes Link</button></a>
+          </div>
+        </div>
+        <div class="contratings">
+            <div class="footeritem">
+              <img class="ratingimage" src="images/Hashtag-26-52px/icons8-hashtag-52.png" alt="ratingimage">
+              <p class="ratingtext"># of Ratings</p>
+              <p class="ratingtext">${item[6]}</p>
+            </div>
+            <div class="footeritem">
+              <img class="ratingimage" src="images/Star-24-48px/icons8-star-48.png" alt="ratingimage">
+              <p class="ratingtext">iTunes Rating</p>
+              <p class="ratingtext">${item[5]}</p>
+            </div>
+            </div>
+          </div>`;
+				div.appendChild(d);
+				display.classList.add('block');
+				display.appendChild(div);
+				document.getElementById('right-arrow').style.visibility = 'visible';
+				if (page > 1) {
+					document.getElementById('left-arrow').style.visibility = 'visible';
+				}
+				let loader = document.getElementById('preloader');
+				loader.classList.add('hidden');
+			}
+		}, 400);
+	};
+	delay();
 }
-
-//GET FULL DATABASE OBJECT AND USE THAT
-
-// display.innerHTML = ``;
-// let array = data.podcasts;
-// let dbArray = responseData;
-
-// for (let i = 0; i < resultsArray.length; i++) {
-// const result = dbArray.id.find(array[i].id);
-// console.log(result, 'result');
-
-// for (let item of resultsArray) {
-// 	let displayImage = document.createElement('img');
-// 	displayImage.classList.add('display-image');
-// 	let div = document.createElement('div');
-// 	div.classList.add('div-style');
-// 	displayImage.src = item[0];
-// 	a = document.createElement('a');
-// 	b = document.createElement('a');
-// 	c = document.createElement('a');
-// 	d = document.createElement('a');
-// 	b.href = item[2];
-// 	// c.innerHTML = `
-// 	//     <a href="${item[1]}" target="_blank"><img class="img display-image" src=${item[0]}></a></img><br><div class ="toolTip">${item[3]
-// 	// .substring(0, 800)
-// 	// .replace(/(<([^>]+)>)/gi, '')}</div>`;
-// 	d.innerHTML = `<div class="podcontainer">
-//     <div class="image">
-//       <a href="${item[1]}" target="_blank"><img class="podimage" src="${item[0]}" alt="pod1"></a>
-//     </div>
-//     <div class="podtitle">
-//       <h1>${item[4].substring(0, 52)}</h1>
-//     </div>
-//     <div class="desc">
-//       <p class="ptext">${item[3].substring(0, 200).replace(/(<([^>]+)>)/gi, '')}...</p>
-//     </div>
-//     <div class="podButtons">
-//       <div class="webButton">
-//       <a href=${item[2]} target="_blank"><button>Website</button></a>
-//       </div>
-//       <div class="webButton">
-//       <a href=${item[7]} target="_blank"><button>iTunes Link</button></a>
-//       </div>
-//     </div>
-//     <div class="contratings">
-//         <div class="footeritem">
-//           <img class="ratingimage" src="images/Hashtag-26-52px/icons8-hashtag-52.png" alt="ratingimage">
-//           <p class="ratingtext"># of Ratings</p>
-//           <p class="ratingtext">${item[6]}</p>
-//         </div>
-//         <div class="footeritem">
-//           <img class="ratingimage" src="images/Star-24-48px/icons8-star-48.png" alt="ratingimage">
-//           <p class="ratingtext">iTunes Rating</p>
-//           <p class="ratingtext">${item[5]}</p>
-//         </div>
-//         </div>
-//       </div>`;
-// 	div.appendChild(d);
-// 	display.classList.add('block');
-// 	display.appendChild(div);
-// 	document.getElementById('right-arrow').style.visibility = 'visible';
-// 	if (page > 1) {
-// 		document.getElementById('left-arrow').style.visibility = 'visible';
-// 	}
-// 	let loader = document.getElementById('preloader');
-// 	loader.classList.add('hidden');
-// }
-// }
 
 // ARROW FOR MORE RESULTS
 let loader = document.getElementById('preloader');

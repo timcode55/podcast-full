@@ -31,19 +31,16 @@ app.get('/podcasts', async (req, res) => {
 	}
 });
 
-<<<<<<< HEAD
-app.get('/findId', async (req, res) => {
+app.post('/findId', async (req, res) => {
 	try {
-		console.log(req.data, 'req.body.id');
-		const podcast = await Rating.find({ id }).lean();
+		const podcast = await Rating.findOne({ id: req.body.id.id }).lean();
 		res.send(podcast);
+		// console.log(req.body, 'req.body.id');
 	} catch (e) {
 		res.status(500).send();
 	}
 });
 
-=======
->>>>>>> hostingfiles
 app.use((req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*');
 	next();
