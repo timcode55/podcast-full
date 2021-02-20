@@ -9,11 +9,13 @@ let mongodb = require('mongodb');
 const Rating = require('./db/Rating');
 const connectDB = require('./db/mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 // Load env vars
 dotenv.config({ path: './config.env' });
 
 let app = express();
+app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.static(path.join(__dirname, 'static')));
 app.use(bodyParser.json({ limit: '50mb' }));
