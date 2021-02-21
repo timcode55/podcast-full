@@ -184,10 +184,10 @@ function getCategories() {
 	});
 
 	// DIVIDE FULL ARRAY INTO SELECTION BOX 1
-	for (let i = 0; i < 82; i++) {
+	for (let i = 0; i < 80; i++) {
 		array.push(fullArray[i]);
 	}
-	for (let i = 82; i < fullArray.length; i++) {
+	for (let i = 80; i < fullArray.length; i++) {
 		array2.push(fullArray[i]);
 	}
 	array.forEach((item) => {
@@ -263,25 +263,6 @@ function getTopPodcastsByGenre(genreId, page) {
 	});
 }
 getTopPodcastsByGenre();
-
-// GET ITUNES LINK DATA
-let newerArray = [];
-async function getItunesLink(data) {
-	let array = data.podcasts;
-	for (let i = 0; i < array.length; i++) {
-		let iTunesId = array[i].itunes_id;
-		const testingData = await axios
-			.get('/podcast_data?id=' + iTunesId)
-			.then((response) => {
-				newerArray.push(response.data.results[0].trackViewUrl);
-			})
-			.catch((error) => {
-				newerArray.push('https://podcasts.apple.com');
-				console.log(error);
-			});
-	}
-	return newerArray;
-}
 
 // DISPLAY DATA
 let display = document.querySelector('.listen');
@@ -391,13 +372,13 @@ let page = 1;
 
 rightArrow.addEventListener('click', (e) => {
 	loader.classList.remove('hidden');
-	newerArray = [];
+	// newerArray = [];
 	let genreId = genreIdArray[0];
 	getTopPodcastsByGenre(genreId, (page += 1));
 	document.getElementById('left-arrow').style.visibility = 'visible';
 	setTimeout(function() {
 		document.body.scrollTop = document.documentElement.scrollTop = 0;
-	}, 500);
+	}, 600);
 });
 leftArrow.addEventListener('click', (e) => {
 	let genreId = genreIdArray[0];
