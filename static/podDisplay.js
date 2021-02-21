@@ -182,24 +182,23 @@ function getCategories() {
 		}
 		return 0;
 	});
-	// console.log(fullArray);
 
 	// DIVIDE FULL ARRAY INTO SELECTION BOX 1
-	for (let i = 0; i < 82; i++) {
+	for (let i = 0; i < 80; i++) {
 		array.push(fullArray[i]);
 	}
-	for (let i = 82; i < fullArray.length; i++) {
+	for (let i = 80; i < fullArray.length; i++) {
 		array2.push(fullArray[i]);
 	}
 	array.forEach((item) => {
-		const option = new Option(item.name, item.name);
+		const option = new Option(item.name, item.id);
 		genreSelector.add(option, undefined);
 	});
 
 	// DIVIDE FULL ARRAY INTO SELECTION BOX 2
 
 	array2.forEach((el) => {
-		const option2 = new Option(el.name, el.name);
+		const option2 = new Option(el.name, el.id);
 		genreSelector2.add(option2, undefined);
 	});
 }
@@ -213,10 +212,11 @@ function getGenre() {
 
 	e.addEventListener('change', function() {
 		let selectedGenre = e.options[e.selectedIndex].text;
-		newerArray = [];
+		let genreId = e.options[e.selectedIndex].value;
+		genreIdArray.unshift(genreId);
 		let displayTitle = document.querySelector('.title');
 		displayTitle.innerHTML = `TOP PODCASTS - ${selectedGenre.toUpperCase()}`;
-		getGenreId(selectedGenre);
+		getTopPodcastsByGenre(genreId, (page = 1));
 	});
 }
 getGenre();
@@ -226,39 +226,40 @@ function getGenre2() {
 
 	e2.addEventListener('change', function() {
 		let selectedGenre = e2.options[e2.selectedIndex].text;
-		newerArray = [];
+		let genreId = e2.options[e2.selectedIndex].value;
+		genreIdArray.unshift(genreId);
 		let displayTitle = document.querySelector('.title');
 		displayTitle.innerHTML = `TOP PODCASTS - ${selectedGenre.toUpperCase()}`;
-		getGenreId(selectedGenre);
+		getTopPodcastsByGenre(genreId, (page = 1));
 	});
 }
 getGenre2();
 
 // GET ALL GENRE CATEGORIES OF PODCASTS
 
-function getGenreId(selectedGenre) {
-	fetch('https://listen-api.listennotes.com/api/v2/genres', {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
-			'X-ListenAPI-Key': '89c65a60479f48a18b39223f8f721ef1'
-		},
-		credentials: 'same-origin'
-	}).then((response) => {
-		response.json().then((data) => {
-			let genreArray = data.genres;
-			for (let i = 0; i < genreArray.length; i++) {
-				if (genreArray[i].name === selectedGenre) {
-					let genreId = genreArray[i].id;
-					genreIdArray.unshift(genreId);
+// function getGenreId(selectedGenre) {
+// 	fetch('https://listen-api.listennotes.com/api/v2/genres', {
+// 		method: 'GET',
+// 		headers: {
+// 			'Content-Type': 'application/json',
+// 			'X-ListenAPI-Key': '89c65a60479f48a18b39223f8f721ef1'
+// 		},
+// 		credentials: 'same-origin'
+// 	}).then((response) => {
+// 		response.json().then((data) => {
+// 			let genreArray = data.genres;
+// 			for (let i = 0; i < genreArray.length; i++) {
+// 				if (genreArray[i].name === selectedGenre) {
+// 					let genreId = genreArray[i].id;
+// 					genreIdArray.unshift(genreId);
 
-					getTopPodcastsByGenre(genreId, (page = 1));
-				}
-			}
-		});
-	});
-}
-getGenreId();
+// 					getTopPodcastsByGenre(genreId, (page = 1));
+// 				}
+// 			}
+// 		});
+// 	});
+// }
+// getGenreId();
 
 // GET ALL TOP PODCASTS FOR SPECIFIC GENRE
 
