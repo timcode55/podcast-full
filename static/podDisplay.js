@@ -274,7 +274,7 @@ async function displayData(data) {
 	//LOOP AND SEARCH FOR BACKEND DATA
 	for (let pod of data.podcasts) {
 		const id = { id: pod.id };
-		const response = axios({
+		const response = await axios({
 			method: 'post',
 			url: '/findId',
 			data: {
@@ -294,31 +294,31 @@ async function displayData(data) {
 	let array = data.podcasts;
 	const delay = () => {
 		let resultsArray = [];
-		setTimeout(() => {
-			for (let i = 0; i < array.length; i++) {
-				resultsArray.push([
-					array[i].image,
-					array[i].listennotes_url,
-					array[i].website,
-					array[i].description,
-					array[i].title,
-					array[i].rating,
-					array[i].numberOfRatings,
-					array[i].itunes
-				]);
-			}
-			for (let item of resultsArray) {
-				let displayImage = document.createElement('img');
-				displayImage.classList.add('display-image');
-				let div = document.createElement('div');
-				div.classList.add('div-style');
-				displayImage.src = item[0];
-				a = document.createElement('a');
-				b = document.createElement('a');
-				c = document.createElement('a');
-				d = document.createElement('a');
-				b.href = item[2];
-				d.innerHTML = `<div class="podcontainer">
+		// setTimeout(() => {
+		for (let i = 0; i < array.length; i++) {
+			resultsArray.push([
+				array[i].image,
+				array[i].listennotes_url,
+				array[i].website,
+				array[i].description,
+				array[i].title,
+				array[i].rating,
+				array[i].numberOfRatings,
+				array[i].itunes
+			]);
+		}
+		for (let item of resultsArray) {
+			let displayImage = document.createElement('img');
+			displayImage.classList.add('display-image');
+			let div = document.createElement('div');
+			div.classList.add('div-style');
+			displayImage.src = item[0];
+			a = document.createElement('a');
+			b = document.createElement('a');
+			c = document.createElement('a');
+			d = document.createElement('a');
+			b.href = item[2];
+			d.innerHTML = `<div class="podcontainer">
         <div class="image">
           <a href="${item[1]}" target="_blank"><img class="podimage" src="${item[0]}" alt="pod1"></a>
         </div>
@@ -349,17 +349,17 @@ async function displayData(data) {
             </div>
             </div>
           </div>`;
-				div.appendChild(d);
-				display.classList.add('block');
-				display.appendChild(div);
-				document.getElementById('right-arrow').style.visibility = 'visible';
-				if (page > 1) {
-					document.getElementById('left-arrow').style.visibility = 'visible';
-				}
-				let loader = document.getElementById('preloader');
-				loader.classList.add('hidden');
+			div.appendChild(d);
+			display.classList.add('block');
+			display.appendChild(div);
+			document.getElementById('right-arrow').style.visibility = 'visible';
+			if (page > 1) {
+				document.getElementById('left-arrow').style.visibility = 'visible';
 			}
-		}, 500);
+			let loader = document.getElementById('preloader');
+			loader.classList.add('hidden');
+		}
+		// }, 500);
 	};
 	delay();
 }
