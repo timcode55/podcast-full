@@ -1,12 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119574573-3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-119574573-3');
+</script>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://kit.fontawesome.com/60d5aa6a19.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="css/container.css">
   <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/mediaqueries.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500&family=Oswald:wght@300;400&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
   <title>Podcast Charts</title>
 </head>
 <body>
@@ -18,7 +29,7 @@
         <label for="podcasts">Choose a Genre:</label>
         <select id="selection" name="scripts"></select>
       </div>
-  
+ 
   
       <div class="selection-box">
         <label for="podcasts">Choose a Genre:</label>
@@ -29,7 +40,9 @@
     
 
   </div>
-  
+  <div id="preloader">
+    <div id="loader"></div>
+  </div>
   <div class="test">
     <div class="container">
       <div class="listen">
@@ -49,6 +62,6 @@
   </div>
   
   <!-- <script src="index.js"></script> -->
-  <script src="podcast.js"></script>
+  <script src="../podDisplay.js"></script>
 </body>
 </html>
