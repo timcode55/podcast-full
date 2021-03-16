@@ -237,29 +237,14 @@ getGenre2();
 
 // GET ALL TOP PODCASTS FOR SPECIFIC GENRE
 
-function getTopPodcastsByGenre(genreId, page) {
-	fetch(
-		'https://listen-api.listennotes.com/api/v2/best_podcasts?genre_id=' +
-			genreId +
-			'&page=' +
-			page +
-			'&region=us&safe_mode=0',
-		{
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-				'X-ListenAPI-Key': '89c65a60479f48a18b39223f8f721ef1'
-			},
-			credentials: 'same-origin'
-		}
-	).then((response) => {
-		response.json().then(async (data) => {
-			display.innerHTML = ``;
-			loader.classList.remove('hidden');
-			document.getElementById('right-arrow').style.visibility = 'hidden';
-			document.getElementById('left-arrow').style.visibility = 'hidden';
-			displayData(data);
-		});
+async function getTopPodcastsByGenre(genreId, page) {
+	await axios.get(`/searchPods/?genreId=${genreId}&page=${page}`).then((response) => {
+		const data = response.data;
+		display.innerHTML = ``;
+		loader.classList.remove('hidden');
+		document.getElementById('right-arrow').style.visibility = 'hidden';
+		document.getElementById('left-arrow').style.visibility = 'hidden';
+		displayData(data);
 	});
 }
 getTopPodcastsByGenre();
