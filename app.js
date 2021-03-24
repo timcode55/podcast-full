@@ -25,6 +25,7 @@ const PORT = 9500;
 
 connectDB();
 
+app.use(express.static(path.join(__dirname, 'static')));
 app.use((req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*');
 	next();
@@ -162,7 +163,27 @@ app.get('/podcasts', async (req, res) => {
 	}
 });
 
-app.use(express.static(path.join(__dirname, 'static')));
+app.get('/searchPods/', async (req, res) => {
+	const genreId = req.query.genreId;
+	const page = req.query.page;
+	url = `https://listen-api.listennotes.com/api/v2/best_podcasts?genre_id=${genreId}&page=${page}&region=us&safe_mode=0`;
+	await request(
+		{
+			url,
+			headers: {
+				'Content-Type': 'application/json',
+				'X-ListenAPI-Key': process.env.ListenAPI
+			},
+			credentials: 'same-origin'
+		},
+		(error, response, body) => {
+			if (error || response.statusCode !== 200) {
+				return res.status(500).json({ type: 'error', message: err.message });
+			}
+			res.json(JSON.parse(body));
+		}
+	);
+});
 
 app.post('/podcasts', (req, res) => {
 	testingResponse(req.body.pods);
