@@ -37,7 +37,6 @@ app.post('/findId', async (req, res) => {
 	try {
 		const podcast = await Rating.findOne({ id: req.body.id.id }).lean();
 		res.send(podcast);
-		// console.log(req.body, 'req.body.id');
 	} catch (e) {
 		res.status(500).send();
 	}
