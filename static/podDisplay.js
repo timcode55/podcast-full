@@ -235,32 +235,6 @@ function getGenre2() {
 }
 getGenre2();
 
-// GET ALL GENRE CATEGORIES OF PODCASTS
-
-// function getGenreId(selectedGenre) {
-// 	fetch('https://listen-api.listennotes.com/api/v2/genres', {
-// 		method: 'GET',
-// 		headers: {
-// 			'Content-Type': 'application/json',
-// 			'X-ListenAPI-Key': '89c65a60479f48a18b39223f8f721ef1'
-// 		},
-// 		credentials: 'same-origin'
-// 	}).then((response) => {
-// 		response.json().then((data) => {
-// 			let genreArray = data.genres;
-// 			for (let i = 0; i < genreArray.length; i++) {
-// 				if (genreArray[i].name === selectedGenre) {
-// 					let genreId = genreArray[i].id;
-// 					genreIdArray.unshift(genreId);
-
-// 					getTopPodcastsByGenre(genreId, (page = 1));
-// 				}
-// 			}
-// 		});
-// 	});
-// }
-// getGenreId();
-
 // GET ALL TOP PODCASTS FOR SPECIFIC GENRE
 
 async function getTopPodcastsByGenre(genreId, page) {
