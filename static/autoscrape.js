@@ -209,7 +209,7 @@ testing(fullArray);
 
 // GET ALL TOP PODCASTS FOR SPECIFIC GENRE
 //SCRAPE NUMBER
-function testing(array, i = 120) {
+function testing(array, i = 89) {
 	// console.log('120', array[i].name);
 	//for (let i = 21; i < 22; i++) {
 	let genreId = array[i].id;
@@ -226,33 +226,20 @@ function testing(array, i = 120) {
 	//}
 }
 
-function getTopPodcastsByGenre(genreId, page) {
+async function getTopPodcastsByGenre(genreId, page) {
 	// console.log(page);
 	if (page === 1) {
 		document.getElementById('left-arrow').style.visibility = 'hidden';
 	}
-	fetch(
-		'https://listen-api.listennotes.com/api/v2/best_podcasts?genre_id=' +
-			genreId +
-			'&page=' +
-			page +
-			'&region=us&safe_mode=0',
-		{
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-				'X-ListenAPI-Key': '89c65a60479f48a18b39223f8f721ef1'
-			},
-			credentials: 'same-origin'
-		}
-	).then((response) => {
-		response.json().then(async (data) => {
-			// console.log(data);
-			displayData(data);
-			console.log(data.podcasts, 'data');
+	await axios.get(`/searchPods/?genreId=${genreId}&page=${page}`).then((response) => {
+		const data = response.data;
+		// console.log(data);
+		displayData(data);
+		console.log(data.podcasts, 'data');
 
-			// SCRAPE DATA AND ADD TO DATABASE
-			// console.log('data going into scraping', data.name);
+		// SCRAPE DATA AND ADD TO DATABASE
+		// console.log('data going into scraping', data.name);
+		async function scrape() {
 			let list = await getItunesLink(data);
 			axios.post('/podcasts', { pods: data.podcasts }).then(function(response) {
 				// console.log(response);
@@ -260,7 +247,8 @@ function getTopPodcastsByGenre(genreId, page) {
 			axios.post('/update', { urls: list, pods: data.podcasts }).then(function(response) {
 				// console.log(response);
 			});
-		});
+		}
+		scrape();
 	});
 }
 
