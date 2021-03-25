@@ -42,20 +42,6 @@ app.post('/findId', async (req, res) => {
 	}
 });
 
-// 'https://listen-api.listennotes.com/api/v2/best_podcasts?genre_id=' +
-// 			genreId +
-// 			'&page=' +
-// 			page +
-// 			'&region=us&safe_mode=0',
-// 		{
-// 			method: 'GET',
-// 			headers: {
-// 				'Content-Type': 'application/json',
-// 				'X-ListenAPI-Key': '89c65a60479f48a18b39223f8f721ef1'
-// 			},
-// 			credentials: 'same-origin'
-// 		}
-
 app.get('/searchPods/', async (req, res) => {
 	const genreId = req.query.genreId;
 	const page = req.query.page;
