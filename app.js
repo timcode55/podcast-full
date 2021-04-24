@@ -41,7 +41,7 @@ app.get('/podcast_data', (req, res) => {
 	});
 });
 
-function testingResponse(array) {
+function scrapeData(array) {
 	for (let i = 0; i < array.length; i++) {
 		try {
 			const newRating = new Rating({
@@ -85,12 +85,17 @@ async function main(list, array) {
 			const $ = await cheerio.load(html);
 			let object = {};
 			const titles = $('.product-header__title');
+			const descriptions = $('.product-hero-desc__section p');
 			const ratings = $('.we-customer-ratings__averages__display');
 			const genre = $('.inline-list__item--bulleted');
 			const numberOfRatings = $('p.we-customer-ratings__count');
 			titles.each((i, element) => {
 				const title = $(element).text().trim();
 				object['title'] = title;
+			});
+			descriptions.each((i, element) => {
+				const description = $(element).text().trim();
+				object['description'] = description;
 			});
 
 			ratings.each((i, element) => {
@@ -119,7 +124,7 @@ async function main(list, array) {
 			try {
 				// console.log(array, 'array at loop');
 				let findTitle = array[index].title;
-				// console.log('223', object);
+				console.log('127', object);
 				Rating.findOneAndUpdate(
 					// $set: { rating: object.rating },
 
@@ -129,7 +134,8 @@ async function main(list, array) {
 							rating: object.rating,
 							genre: object.genre,
 							itunes: list[i],
-							numberOfRatings: object.numberOfRatings
+							numberOfRatings: object.numberOfRatings,
+							description: object.description
 						}
 					},
 					{ new: true },
@@ -186,7 +192,7 @@ app.get('/searchPods/', async (req, res) => {
 });
 
 app.post('/podcasts', (req, res) => {
-	testingResponse(req.body.pods);
+	scrapeData(req.body.pods);
 	res.send({ status: 'ok' });
 });
 
