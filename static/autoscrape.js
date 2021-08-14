@@ -247,7 +247,7 @@ const getTopPodcastsByGenre = async (genreId, page, categoryTitle) => {
 	});
 };
 
-const scrapePodcasts = (array, i = 44) => {
+const scrapePodcasts = (array, i = 0) => {
 	// console.log('120', array[i].name);
 	//for (let i = 21; i < 22; i++) {
 	let genreId = array[i].id;
