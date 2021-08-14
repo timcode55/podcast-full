@@ -162,7 +162,7 @@ const categoryArray = [
 	{ id: 99, name: 'News', parent_id: 67 }
 ];
 let fullArray = [];
-function getCategories() {
+const getCategories = () => {
 	let genreSelector = document.getElementById('selection');
 	let genreSelector2 = document.getElementById('selection2');
 
@@ -173,7 +173,7 @@ function getCategories() {
 	for (let i = 0; i < categoryArray.length; i++) {
 		fullArray.push(categoryArray[i]);
 	}
-	fullArray.sort(function(a, b) {
+	fullArray.sort((a, b) => {
 		if (a.name < b.name) {
 			return -1;
 		}
@@ -202,86 +202,106 @@ function getCategories() {
 		const option2 = new Option(el.name, el.name);
 		genreSelector2.add(option2, undefined);
 	});
-}
+};
 
 getCategories();
-testing(fullArray);
+// console.log(fullArray, 'FULLARRAY BEFORE TESTING CALL 208');
 
 // GET ALL TOP PODCASTS FOR SPECIFIC GENRE
 //SCRAPE NUMBER
-function testing(array, i = 0) {
-	// console.log('120', array[i].name);
-	//for (let i = 21; i < 22; i++) {
-	let genreId = array[i].id;
-	console.log(i, array[i].name);
-	let titleDisplay = document.querySelector('.title');
-	titleDisplay.textContent = `CATEGORY - ${array[i].name.toUpperCase()}`;
-	// START OF PAGE TO SCRAPE
-	let page = 1;
-	getTopPodcastsByGenre(genreId, (page = 1));
 
-	setTimeout(() => {
-		if (array.length > i) testing(array, i + 1);
-	}, 70000); // multiple i by 1000
-	//}
-}
-
-async function getTopPodcastsByGenre(genreId, page) {
+const getTopPodcastsByGenre = async (genreId, page, categoryTitle) => {
 	// console.log(page);
 	if (page === 1) {
 		document.getElementById('left-arrow').style.visibility = 'hidden';
 	}
 	await axios.get(`/searchPods/?genreId=${genreId}&page=${page}`).then((response) => {
+		// console.log(genreId);
 		const data = response.data;
-		// console.log(data);
+		// console.log(data, 'DATA IN AXIOS /SEARCHPODS/ 239');
 		displayData(data);
 		console.log(data.podcasts, 'data');
 
 		// SCRAPE DATA AND ADD TO DATABASE
 		// console.log('data going into scraping', data.name);
-		async function scrape() {
+		const scrape = async (categoryTitle) => {
 			let list = await getItunesLink(data);
-			axios.post('/podcasts', { pods: data.podcasts }).then(function(response) {
-				// console.log(response);
-			});
-			axios.post('/update', { urls: list, pods: data.podcasts }).then(function(response) {
-				// console.log(response);
-			});
-		}
-		scrape();
+			axios
+				.post('/podcasts', { pods: data.podcasts, category: categoryTitle })
+				.then((response) => {
+					// console.log(response);
+				})
+				.catch((error) => {
+					console.log(error, 'ERROR');
+				});
+			axios
+				.post('/update', { urls: list, pods: data.podcasts, category: categoryTitle })
+				.then((response) => {
+					// console.log(response);
+				})
+				.catch((error) => {
+					console.log(error, 'ERROR');
+				});
+		};
+		scrape(categoryTitle);
 	});
-}
+};
+
+const scrapePodcasts = (array, i = 44) => {
+	// console.log('120', array[i].name);
+	//for (let i = 21; i < 22; i++) {
+	let genreId = array[i].id;
+	console.log(i, array[i].name);
+	let categoryTitle = array[i].name;
+	let titleDisplay = document.querySelector('.title');
+	titleDisplay.textContent = `CATEGORY - ${array[i].name.toUpperCase()}`;
+	// START OF PAGE TO SCRAPE
+	let page = 1;
+	getTopPodcastsByGenre(genreId, (page = 1), categoryTitle);
+
+	setTimeout(() => {
+		if (array.length > i) scrapePodcasts(array, i + 1);
+	}, 140000); // multiple i by 1000
+	//}
+};
+scrapePodcasts(fullArray);
 
 // GET ITUNES LINK DATA
 let newerArray = [];
-async function getItunesLink(data) {
+const getItunesLink = async (data) => {
 	// DISPLAY ITUNES LINKS ON DEFAULT MAIN PAGE
 	// document.querySelectorAll('.div-style a.img-link').forEach((el, i) => {
 	// 	el.href = newerArray[i];
 	// });
 	let array = data.podcasts;
+	// console.log(array, 'ARRAY IN GETITUNESLINK FUNCTION 268');
 	for (let i = 0; i < array.length; i++) {
 		let iTunesId = array[i].itunes_id;
 		// console.log(iTunesId);
-		const testingData = await axios
-			.get('/podcast_data?id=' + iTunesId)
-			.then((response) => {
-				// console.log(response);
-				newerArray.push(response.data.results[0].trackViewUrl);
-				// document.querySelectorAll('.rating-container button.button.red.info a')[i].href = 'www.google.com';
-			})
-			.catch((error) => {
-				newerArray.push('https://podcasts.apple.com');
-			});
+		if (iTunesId) {
+			await axios
+				.get('/podcast_data?id=' + iTunesId)
+				.then((response) => {
+					// console.log(response);
+					newerArray.push(response.data.results[0].trackViewUrl);
+					// document.querySelectorAll('.rating-container button.button.red.info a')[i].href = 'www.google.com';
+				})
+				.catch((error) => {
+					newerArray.push('https://podcasts.apple.com');
+				});
+		} else {
+			continue;
+		}
 	}
 	return newerArray;
-}
+};
 
 let fullPodcastData;
-async function displayData(data) {
+const displayData = async (data) => {
 	let display = document.querySelector('.listen');
 	display.innerHTML = `....Loading`;
 	const response = await fetch('/podcasts');
+	// console.log(response, 'RESPONSE IN DISPLAYDATA 291');
 
 	fullPodcastData = fullPodcastData || (await response.json());
 	// console.log('218 fullpodcastdata', fullPodcastData);
@@ -377,7 +397,7 @@ async function displayData(data) {
 		display.appendChild(div);
 		// getData(data);
 	}
-}
+};
 
 // ARROW FOR MORE RESULTS
 
@@ -393,7 +413,7 @@ rightArrow.addEventListener('click', (e) => {
 
 	getTopPodcastsByGenre(genreId, (page += 1));
 	document.getElementById('left-arrow').style.visibility = 'visible';
-	setTimeout(function() {
+	setTimeout(() => {
 		document.body.scrollTop = document.documentElement.scrollTop = 0;
 	}, 500);
 	// console.log(page);
@@ -401,7 +421,7 @@ rightArrow.addEventListener('click', (e) => {
 leftArrow.addEventListener('click', (e) => {
 	let genreId = genreIdArray[0];
 	getTopPodcastsByGenre(genreId, (page -= 1));
-	setTimeout(function() {
+	setTimeout(() => {
 		document.body.scrollTop = document.documentElement.scrollTop = 0;
 	}, 500);
 });

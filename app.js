@@ -41,7 +41,7 @@ app.get('/podcast_data', (req, res) => {
 	});
 });
 
-function testingResponse(array) {
+const listenNotesData = (array, category) => {
 	for (let i = 0; i < array.length; i++) {
 		try {
 			const newRating = new Rating({
@@ -51,6 +51,7 @@ function testingResponse(array) {
 				image: array[i].image,
 				numberOfRatings: '',
 				genre: '',
+				listenNotesGenre: category,
 				description: array[i].description,
 				website: array[i].website,
 				itunes: '',
@@ -70,8 +71,8 @@ function testingResponse(array) {
 		}
 	}
 	update();
-}
-async function main(list, array) {
+};
+const main = async (list, array, category) => {
 	if (list.length > 20) {
 		list = list.slice(list.length - 20);
 	}
@@ -114,10 +115,12 @@ async function main(list, array) {
 				}
 				// console.log(numberOfRatings);
 				object['numberOfRatings'] = numberOfRatings;
+				object['itunes'] = list[i];
+				object['listenNotesGenre'] = category;
 			});
 
 			try {
-				// console.log(array, 'array at loop');
+				// console.log(array, 'array at loop 122');
 				let findTitle = array[index].title;
 				// console.log('223', object);
 				Rating.findOneAndUpdate(
@@ -128,12 +131,13 @@ async function main(list, array) {
 						$set: {
 							rating: object.rating,
 							genre: object.genre,
+							listenNotesGenre: category,
 							itunes: list[i],
 							numberOfRatings: object.numberOfRatings
 						}
 					},
 					{ new: true },
-					function(err, res) {
+					(err, res) => {
 						if (err) throw err;
 						console.log('1 document updated');
 					}
@@ -152,7 +156,7 @@ async function main(list, array) {
 	}
 
 	console.log('ALL DONE SCANNING');
-}
+};
 
 app.get('/podcasts', async (req, res) => {
 	try {
@@ -186,17 +190,17 @@ app.get('/searchPods/', async (req, res) => {
 });
 
 app.post('/podcasts', (req, res) => {
-	testingResponse(req.body.pods);
+	listenNotesData(req.body.pods, req.body.category);
 	res.send({ status: 'ok' });
 });
 
-function update() {
+const update = () => {
 	app.post('/update', (req, res) => {
-		main(req.body.urls, req.body.pods);
+		main(req.body.urls, req.body.pods, req.body.category);
 
 		res.send({ status: 'working' });
 	});
-}
+};
 
 app.listen(PORT, () => {
 	console.log('Server is up on port ' + PORT);

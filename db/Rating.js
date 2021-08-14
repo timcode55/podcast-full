@@ -9,6 +9,7 @@ const Rating = mongoose.model(
 		image: String,
 		numberOfRatings: Number,
 		genre: String,
+		listenNotesGenre: String,
 		description: String,
 		website: String,
 		itunes: String,
