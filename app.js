@@ -184,7 +184,7 @@ const main = async (list, array, category) => {
       try {
         // console.log(array, 'array at loop 122');
         let findTitle = array[index].title;
-        // console.log('223', object);
+        console.log("223", object);
         Rating.findOneAndUpdate(
           // $set: { rating: object.rating },
 
