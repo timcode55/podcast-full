@@ -1,5 +1,7 @@
 // POPULATE SELECTION BOXES WITH PODCAST CATEGORIES --!
 
+// const { default: axios } = require("axios");
+
 const categoryArray = [
   { id: 139, name: "VR & AR", parent_id: 127 },
   { id: 140, name: "Web Design", parent_id: 127 },
@@ -253,7 +255,7 @@ const getTopPodcastsByGenre = async (genreId, page, categoryTitle) => {
     });
 };
 
-const scrapePodcasts = (array, i = 0) => {
+const scrapePodcasts = (array, i = 50) => {
   // console.log('120', array[i].name);
   //for (let i = 21; i < 22; i++) {
   let genreId = array[i].id;
@@ -266,7 +268,7 @@ const scrapePodcasts = (array, i = 0) => {
   getTopPodcastsByGenre(genreId, (page = 1), categoryTitle);
 
   setTimeout(() => {
-    if (array.length > i) scrapePodcasts(array, i + 1);
+    if (array.length > i && i !== array.length) scrapePodcasts(array, i + 1);
   }, 90000); // multiple i by 1000
   //}
 };
