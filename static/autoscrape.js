@@ -2,6 +2,8 @@
 
 // const { default: axios } = require("axios");
 
+// const { default: axios } = require("axios");
+
 const categoryArray = [
   { id: 139, name: "VR & AR", parent_id: 127 },
   { id: 140, name: "Web Design", parent_id: 127 },
@@ -212,156 +214,158 @@ getCategories();
 // GET ALL TOP PODCASTS FOR SPECIFIC GENRE
 //SCRAPE NUMBER
 
-const getTopPodcastsByGenre = async (genreId, page, categoryTitle) => {
-  // console.log(page);
-  if (page === 1) {
-    document.getElementById("left-arrow").style.visibility = "hidden";
-  }
-  await axios
-    .get(`/searchPods/?genreId=${genreId}&page=${page}`)
-    .then((response) => {
-      // console.log(genreId);
-      const data = response.data;
-      // console.log(data, 'DATA IN AXIOS /SEARCHPODS/ 239');
-      displayData(data);
-      console.log(data.podcasts, "data");
+// const getBackendData = async () => {
+//   // console.log(page);
+//   // if (page === 1) {
+//   //   document.getElementById("left-arrow").style.visibility = "hidden";
+//   // }
+//   axios
+//     .get("/display")
+//     .then((response = response.json()))
+//     .then((data) => console.log(data, "DATA FROM FE GETBACKENDDATA"));
+//   // try {
+//   //   let response = await axios.get("/display");
+//   //   console.log(response.data, "RESPONSE.DATA IN GEETBACKENDDATA");
+//   // } catch (error) {
+//   //   console.log(error, "ERROR WITH AXIOS GET ON FE");
+//   // }
+//   // await axios.get(`/display`).then((response) => {
+//   //   const data = response.data;
+//   //   console.log(data, "data in axios display");
+//   displayData(data);
+//   // });
+// };
 
-      // SCRAPE DATA AND ADD TO DATABASE
-      // console.log('data going into scraping', data.name);
-      const scrape = async (categoryTitle) => {
-        let list = await getItunesLink(data);
-        axios
-          .post("/podcasts", { pods: data.podcasts, category: categoryTitle })
-          .then((response) => {
-            console.log(response);
-          })
-          .catch((error) => {
-            console.log(error, "ERROR");
-          });
-        axios
-          .post("/update", {
-            urls: list,
-            pods: data.podcasts,
-            category: categoryTitle,
-          })
-          .then((response) => {
-            // console.log(response);
-          })
-          .catch((error) => {
-            console.log(error, "ERROR");
-          });
-      };
-      scrape(categoryTitle);
-    });
-};
+// getBackendData();
 
-const scrapePodcasts = (array, i = 50) => {
-  // console.log('120', array[i].name);
-  //for (let i = 21; i < 22; i++) {
-  let genreId = array[i].id;
-  console.log(i, array[i].name);
-  let categoryTitle = array[i].name;
-  let titleDisplay = document.querySelector(".title");
-  titleDisplay.textContent = `CATEGORY - ${array[i].name.toUpperCase()}`;
-  // START OF PAGE TO SCRAPE
-  let page = 1;
-  getTopPodcastsByGenre(genreId, (page = 1), categoryTitle);
+// const scrapePodcasts = (array, i = 50) => {
+//   // console.log('120', array[i].name);
+//   //for (let i = 21; i < 22; i++) {
+//   let genreId = array[i].id;
+//   console.log(i, array[i].name);
+//   let categoryTitle = array[i].name;
+//   let titleDisplay = document.querySelector(".title");
+//   titleDisplay.textContent = `CATEGORY - ${array[i].name.toUpperCase()}`;
+//   // START OF PAGE TO SCRAPE
+//   let page = 1;
+//   getTopPodcastsByGenre(genreId, (page = 1), categoryTitle);
 
-  setTimeout(() => {
-    if (array.length > i && i !== array.length) scrapePodcasts(array, i + 1);
-  }, 90000); // multiple i by 1000
-  //}
-};
-scrapePodcasts(fullArray);
+//   setTimeout(() => {
+//     if (array.length > i && i !== array.length) scrapePodcasts(array, i + 1);
+//   }, 90000); // multiple i by 1000
+//   //}
+// };
+// scrapePodcasts(fullArray);
 
 // GET ITUNES LINK DATA
-let newerArray = [];
-const getItunesLink = async (data) => {
-  // DISPLAY ITUNES LINKS ON DEFAULT MAIN PAGE
-  // document.querySelectorAll('.div-style a.img-link').forEach((el, i) => {
-  // 	el.href = newerArray[i];
-  // });
-  let array = data.podcasts;
-  // console.log(array, 'ARRAY IN GETITUNESLINK FUNCTION 268');
-  for (let i = 0; i < array.length; i++) {
-    let iTunesId = array[i].itunes_id;
-    // console.log(iTunesId);
-    if (iTunesId) {
-      await axios
-        .get("/podcast_data?id=" + iTunesId)
-        .then((response) => {
-          // console.log(response);
-          newerArray.push(response.data.results[0].trackViewUrl);
-          // document.querySelectorAll('.rating-container button.button.red.info a')[i].href = 'www.google.com';
-        })
-        .catch((error) => {
-          newerArray.push("https://podcasts.apple.com");
-        });
-    } else {
-      continue;
-    }
-  }
-  return newerArray;
-};
+// let newerArray = [];
+// const getItunesLink = async (data) => {
+//   // DISPLAY ITUNES LINKS ON DEFAULT MAIN PAGE
+//   // document.querySelectorAll('.div-style a.img-link').forEach((el, i) => {
+//   // 	el.href = newerArray[i];
+//   // });
+//   let array = data.podcasts;
+//   // console.log(array, 'ARRAY IN GETITUNESLINK FUNCTION 268');
+//   for (let i = 0; i < array.length; i++) {
+//     let iTunesId = array[i].itunes_id;
+//     // console.log(iTunesId);
+//     if (iTunesId) {
+//       await axios
+//         .get("/podcast_data?id=" + iTunesId)
+//         .then((response) => {
+//           // console.log(response);
+//           newerArray.push(response.data.results[0].trackViewUrl);
+//           // document.querySelectorAll('.rating-container button.button.red.info a')[i].href = 'www.google.com';
+//         })
+//         .catch((error) => {
+//           newerArray.push("https://podcasts.apple.com");
+//         });
+//     } else {
+//       continue;
+//     }
+//   }
+//   return newerArray;
+// };
 
-let fullPodcastData;
+const getBtn = document.getElementById("get");
+
+const baseUrl = "http://localhost:8000/display";
+
+const getData = async function (e) {
+  e.preventDefault();
+  const response = await fetch(baseUrl, {
+    method: "GET",
+  });
+  const data = await response.json();
+  console.log(data, "FULL DATA IN /DISPLAY");
+  // console.log(data.data[0], "DATA IN GETDATAFE");
+  console.log(data.category, "category", data.index, "index");
+  displayData(data.data);
+  // console.log(response.json(), "RESPONSE FROM BE");
+};
+getBtn.addEventListener("click", getData);
+
+// let fullPodcastData;
 const displayData = async (data) => {
+  console.log(typeof data.data, "Type of DATA IN DISPLAYDATA");
+  console.log(data, "DATA IN DISPLAYDATA");
   let display = document.querySelector(".listen");
   display.innerHTML = `....Loading`;
-  const response = await fetch("/podcasts");
+  const podArray = data.data;
+  // const response = await fetch("/podcasts");
   // console.log(response, 'RESPONSE IN DISPLAYDATA 291');
 
-  fullPodcastData = fullPodcastData || (await response.json());
+  // fullPodcastData = fullPodcastData || (await response.json());
   // console.log('218 fullpodcastdata', fullPodcastData);
-  let ratingData = fullPodcastData;
+  // let ratingData = fullPodcastData;
   // console.log(data);
-  for (let pod of data.podcasts) {
-    // console.log(pod.website);
+  // for (let pod of data.podcasts) {
+  // console.log(pod.website);
 
-    for (let item of ratingData) {
-      // console.log(item.url);
-      // console.log(pod.title);
-      let itemTitle = item.title;
-      let podTitle = pod.title;
+  // for (let item of data) {
+  //   // console.log(item.url);
+  //   // console.log(pod.title);
+  //   let itemTitle = item.title;
+  //   let podTitle = item.title;
 
-      if (itemTitle && podTitle) {
-        let itemTrimTitle = itemTitle.trim();
-        let itemPodTitle = podTitle.trim();
-        if (itemTrimTitle === itemPodTitle) {
-          // console.log(itemTrimTitle);
-          // console.log(itemPodTitle);
-          if (item.rating === undefined) {
-            pod.newRating = "N/A";
-          } else {
-            pod.newRating = item.rating;
-          }
-          pod.numberOfRatings = item.numberOfRatings || "N/A";
-          pod.url = item.url;
-        }
-      }
-    }
-  }
+  //   if (itemTitle && podTitle) {
+  //     let itemTrimTitle = itemTitle.trim();
+  //     let itemPodTitle = podTitle.trim();
+  //     if (itemTrimTitle === itemPodTitle) {
+  //       // console.log(itemTrimTitle);
+  //       // console.log(itemPodTitle);
+  //       // if (item.rating === undefined) {
+  //       //   pod.newRating = "N/A";
+  //       // } else {
+  //       //   pod.newRating = item.rating;
+  //       // }
+  //       // pod.numberOfRatings = item.numberOfRatings || "N/A";
+  //       // pod.url = item.url;
+  //     }
+  //   }
+  // }
+  // }
 
   display.innerHTML = ``;
-  let array = data.podcasts;
+  // let array = data.podcasts;
   // console.log('253 array', array);
-  let resultsArray = [];
+  // let resultsArray = [];
   // console.log(newerArray.length);
 
   // console.log(newerArray.length);
-  for (let i = 0; i < array.length; i++) {
-    resultsArray.push([
-      array[i].image,
-      array[i].listennotes_url,
-      array[i].website,
-      array[i].description,
-      array[i].title,
-      array[i].newRating,
-      array[i].numberOfRatings,
-      array[i].url,
-    ]);
-  }
-  for (let item of resultsArray) {
+  // for (let i = 0; i < data.length; i++) {
+  //   resultsArray.push([
+  //     data[i].image,
+  //     data[i].listennotes_url,
+  //     data[i].website,
+  //     data[i].description,
+  //     data[i].title,
+  //     data[i].newRating,
+  //     data[i].numberOfRatings,
+  //     data[i].url,
+  //   ]);
+  // }
+  for (item of podArray) {
     // console.log('271 item', item);
     let displayImage = document.createElement("img");
     // let toolTip = document.createElement('div');
@@ -379,7 +383,7 @@ const displayData = async (data) => {
 
     document.getElementById("right-arrow").style.visibility = "visible";
 
-    // console.log('resultsarray 286', resultsArray);
+    // console.log("resultsarray 286", resultsArray);
     a.setAttribute("target", "_blank");
     b.setAttribute("target", "_blank");
     // d.setAttribute('target', '_blank');
@@ -387,15 +391,15 @@ const displayData = async (data) => {
     c.classList = "img-link";
     c.setAttribute("id", `${item[4]}`);
     a.innerHTML = `
-    <div class="rating-container"><button class="rating-overlay button red">${item[5]}</button><button class="number-ratings button red"># of ratings ${item[6]}</button><button class="button red info"><a href="${item[7]}"target="_blank">Podcast Info</button></a></div>`;
+    <div class="rating-container"><button class="rating-overlay button red">${item.rating}</button><button class="number-ratings button red"># of ratings ${item.numberOfRatings}</button><button class="button red info"><a href="${item[7]}"target="_blank">Podcast Info</button></a></div>`;
     b.innerHTML = `
           <button class="button red webLink">Website</button>`;
     c.innerHTML = `
           <a href="${
-            item[1]
+            item.image
           }" target="_blank"><img class="img display-image" src=${
-      item[0]
-    }></a></img><br><div class ="toolTip">${item[3]
+      item.image
+    }></a></img><br><div class ="toolTip">${item.description
       .substring(0, 800)
       .replace(/(<([^>]+)>)/gi, "")}</div>`;
 
