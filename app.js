@@ -171,12 +171,13 @@ const scrapeRatings = async (array, category, arrayIndex) => {
 
       // for (let i = 0; i < numberOfRatings.length; i++) {
       if (numberOfRatings.includes("K")) {
-        // numberOfRatings = parseFloat(numberOfRatings) * 1000;
-        array[i]["numberOfRatings"] = parseFloat(numberOfRatings) * 1000;
+        array[i]["numberOfRatings"] = parseInt(
+          parseFloat(numberOfRatings) * 1000
+        );
       } else {
-        // numberOfRatings;
-        array[i]["numberOfRatings"] = parseFloat(numberOfRatings) || 0;
+        array[i]["numberOfRatings"] = parseInt(numberOfRatings, 10) || 0;
       }
+
       // }
       // console.log(numberOfRatings);
 
@@ -302,7 +303,7 @@ app.get("/display", (req, res) => {
   });
 });
 // Scrape #
-const scrapePodcasts = (array, i = 0) => {
+const scrapePodcasts = (array, i = 57) => {
   console.log("testing");
   console.log("daily podcasts*****", array[i].name);
   //for (let i = 21; i < 22; i++) {
