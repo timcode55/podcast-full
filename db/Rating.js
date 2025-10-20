@@ -5,12 +5,14 @@ const Rating = mongoose.model(
   mongoose.Schema({
     title: {
       type: String,
-      index: true,
-      unique: true,
-      dropDups: true,
+      index: true, // searchable, but not unique
       sparse: true,
     },
-    id: String,
+    id: {
+      type: String,
+      unique: true,
+      index: true,
+    },
     rating: Number,
     image: String,
     numberOfRatings: Number,
